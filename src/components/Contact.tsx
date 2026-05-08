@@ -23,7 +23,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: 'Location',
-    value: 'Jamshedpur, India',
+    value: 'Dharwad, Karnataka',
     href: '#',
   },
 ];
@@ -32,6 +32,18 @@ const contactInfo = [
 const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
 const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
 const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
+
+const getErrorMessage = (err: unknown) => {
+  if (typeof err === 'object' && err !== null && 'text' in err && typeof err.text === 'string') {
+    return err.text;
+  }
+
+  if (err instanceof Error) {
+    return err.message;
+  }
+
+  return 'Please try again later or email me directly.';
+};
 
 const Contact = () => {
   const { toast } = useToast();
@@ -67,13 +79,6 @@ const Contact = () => {
     try {
       setIsSubmitting(true);
 
-      // Log envs for debug: comment out after confirming!
-      console.log({
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        EMAILJS_PUBLIC_KEY
-      });
-
       // EmailJS expects keys matching the template keys in dashboard
       const templateParams = {
         name: formData.name,
@@ -93,16 +98,17 @@ const Contact = () => {
       toast({
         title: 'Message sent!',
         description:
-          "Thanks for reaching out. Let's collaborate—I’ll get back to you shortly.",
+          "Thanks for reaching out. Let's collaborate - I'll get back to you shortly.",
       });
 
       setFormData({ name: '', email: '', message: '' });
       formRef.current?.reset();
-    } catch (err: any) {
-      console.error('EmailJS error:', err?.text || err?.message || err);
+    } catch (err: unknown) {
+      const message = getErrorMessage(err);
+      console.error('EmailJS error:', message);
       toast({
         title: 'Failed to send',
-        description: err?.text || 'Please try again later or email me directly.',
+        description: message,
       });
     } finally {
       setIsSubmitting(false);
@@ -123,7 +129,7 @@ const Contact = () => {
             Get In Touch
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-4" />
-          <p className="text-foreground/80 text-lg max-w-2xl mx-auto">
+          <p className="mx-auto max-w-2xl text-base text-foreground/80 sm:text-lg">
             Have a project in mind or want to collaborate? Feel free to reach out!
           </p>
         </motion.div>
@@ -135,7 +141,7 @@ const Contact = () => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className="space-y-6"
+            className="space-y-4 sm:space-y-6"
           >
             {contactInfo.map((info, index) => {
               const Icon = info.icon;
@@ -148,14 +154,14 @@ const Contact = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ x: 10 }}
-                  className="glass glass-hover rounded-xl p-6 flex items-center gap-4 group"
+                  className="animated-card spread-hover glass glass-hover group flex items-center gap-4 rounded-xl p-4 sm:p-6"
                 >
-                  <div className="w-12 h-12 rounded-lg bg-gradient-to-br from-primary to-accent p-3 shadow-glow">
+                  <div className="h-11 w-11 flex-shrink-0 rounded-lg bg-gradient-to-br from-primary to-accent p-3 shadow-glow sm:h-12 sm:w-12">
                     <Icon className="w-full h-full text-white" />
                   </div>
-                  <div>
+                  <div className="min-w-0">
                     <p className="text-muted-foreground text-sm mb-1">{info.label}</p>
-                    <p className="text-foreground font-medium">{info.value}</p>
+                    <p className="break-words text-sm font-medium text-foreground sm:text-base">{info.value}</p>
                   </div>
                 </motion.a>
               );
@@ -169,7 +175,7 @@ const Contact = () => {
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
           >
-            <form ref={formRef} onSubmit={handleSubmit} className="glass rounded-2xl p-8 space-y-6">
+            <form ref={formRef} onSubmit={handleSubmit} className="animated-card glass rounded-2xl p-5 space-y-5 sm:p-8 sm:space-y-6">
               <div>
                 <label htmlFor="name" className="block text-sm font-medium mb-2">
                   Name
@@ -200,7 +206,7 @@ const Contact = () => {
                 />
                 {isValidEmail(formData.email) && (
                   <div className="text-primary mt-2 text-sm">
-                    Awesome! I’d love to collaborate—share your project details below. 🚀
+                    Awesome! I'd love to collaborate - share your project details below.
                   </div>
                 )}
               </div>
@@ -223,7 +229,7 @@ const Contact = () => {
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow hover:shadow-glow-lg transition-all"
+                className="spread-hover w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow hover:shadow-glow-lg transition-all"
               >
                 {isSubmitting ? 'Sending...' : (
                   <>

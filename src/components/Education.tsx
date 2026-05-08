@@ -5,9 +5,9 @@ import { useState } from 'react';
 // Place your college/school logos in 'public/images'
 const educationData = [
   {
-    degree: 'Bachlors of Technology in Computer Science & Engg',
-    university: 'Indian Institute of Information Technology, Dharwad',
-    year: '2023 - 2027',
+    degree: 'B.Tech in Computer Science',
+    university: 'Indian Institute of Information Technology (IIIT), Dharwad',
+    year: 'Sept. 2023 - July 2027',
     coursework: [
       'Full Stack Development',
       'Artificial Intelligence',
@@ -16,7 +16,6 @@ const educationData = [
       'Statistics & Probability',
       'Algebra & Calculus'
     ],
-    honors: 'Graduated with Honors - GPA 3.9/4.0',
     logo: '/images/InstituteProfile.png',
   },
   {
@@ -29,7 +28,6 @@ const educationData = [
       'Mathematics',
       'Chemistry'
     ],
-    honors: 'Graduated with Honors - GPA 3.9/4.0',
     logo: '/images/SchoolImage.png',
   },
   {
@@ -59,21 +57,21 @@ const EducationCard = ({ edu }) => {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.5 }}
-      whileHover={{ y: -5 }}
-      className="glass glass-hover rounded-2xl p-8"
+      whileHover={{ y: -4 }}
+      className="animated-card glass glass-hover rounded-2xl p-5 sm:p-8"
     >
-      <div className="flex flex-col md:flex-row gap-6 items-center">
+      <div className="flex flex-col items-center gap-5 text-center md:flex-row md:gap-6 md:text-left">
         {/* Profile box: soft rounded square, white, with glow */}
         <motion.div
           whileHover={{ scale: 1.08 }}
           transition={{ duration: 0.4 }}
-          className="flex-shrink-0 w-24 h-24 rounded-2xl bg-white shadow-[0_0_24px_2px_rgba(5,183,255,0.25)] flex items-center justify-center"
+          className="flex h-20 w-20 flex-shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_0_24px_2px_rgba(5,183,255,0.25)] sm:h-24 sm:w-24"
         >
           {edu.logo && !imgError ? (
             <img
               src={edu.logo}
               alt={`${edu.university} logo`}
-              className="w-20 h-20 object-contain rounded-md"
+              className="h-16 w-16 rounded-md object-contain sm:h-20 sm:w-20"
               onError={() => setImgError(true)}
             />
           ) : (
@@ -84,25 +82,27 @@ const EducationCard = ({ edu }) => {
         {/* Content */}
         <div className="flex-grow min-w-0">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between mb-4">
-            <h3 className="text-2xl font-bold text-foreground">
+            <h3 className="text-xl font-bold leading-tight text-foreground sm:text-2xl">
               {edu.degree}
             </h3>
             <span className="text-primary font-medium mt-2 md:mt-0">
               {edu.year}
             </span>
           </div>
-          <p className="text-xl text-foreground/80 mb-4">{edu.university}</p>
+          <p className="mb-4 text-base text-foreground/80 sm:text-xl">{edu.university}</p>
           {/* Honors */}
-          <div className="flex items-start gap-2 mb-4 text-secondary">
+          {edu.honors && (
+          <div className="mb-4 flex items-start justify-center gap-2 text-secondary md:justify-start">
             <Award size={20} className="mt-0.5 flex-shrink-0" />
             <span className="font-medium">{edu.honors}</span>
           </div>
+          )}
           {/* Coursework */}
           <div>
             <h4 className="text-sm font-semibold text-muted-foreground mb-2">
               Relevant Coursework:
             </h4>
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap justify-center gap-2 md:justify-start">
               {edu.coursework.map((course) => (
                 <span
                   key={course}

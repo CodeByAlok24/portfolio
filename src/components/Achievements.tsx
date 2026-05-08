@@ -3,6 +3,14 @@ import { Trophy, Award, FileText, Star } from 'lucide-react';
 
 const achievements = [
   {
+    title: 'Runner-Up - Agentica 2.0 Hackathon',
+    organization: 'AI / Full-Stack Developer',
+    date: 'March 2026',
+    icon: Trophy,
+    logo: '/images/IIITSriCity.png',
+    link: '#experience',
+  },
+  {
     title: 'HTML & CSS in Depth',
     organization: 'Meta (Coursera)',
     date: '2025',
@@ -51,7 +59,7 @@ const achievements = [
     link: 'https://forage-uploads-prod.s3.amazonaws.com/completion-certificates/ovyvuqqNRQKBjNxbj/EzKFRQ2oEA87PPjsL_ovyvuqqNRQKBjNxbj_Ct8ptgxcLXJehdzyq_1750847597569_completion_certificate.pdf',
   },
   {
-    title: 'Certificate of Participation – DevHack 6.0',
+    title: 'Certificate of Participation - DevHack 6.0',
     organization: 'Parsec - IIT Dharwad (Hackathon)',
     date: '2025',
     icon: Award,
@@ -85,17 +93,17 @@ const Achievements = () => {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10, scale: 1.02 }}
+              whileHover={{ y: -6, scale: 1.01 }}
               className="relative group cursor-pointer"
             >
               {/* Flex container: Logo on left, Card on right with gap */}
-              <div className="flex items-center gap-4">
+              <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
                 {/* Logo container - separate with white background */}
-                <div className="w-20 h-20 bg-white rounded-2xl shadow-[0_0_16px_1px_rgba(5,183,255,0.15)] flex items-center justify-center flex-shrink-0">
+                <div className="mx-auto flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_0_16px_1px_rgba(5,183,255,0.15)] sm:mx-0 sm:h-20 sm:w-20">
                   <img
                     src={achievement.logo}
                     alt="logo"
-                    className="w-14 h-14 object-contain"
+                    className="h-12 w-12 object-contain sm:h-14 sm:w-14"
                   />
                 </div>
 
@@ -104,14 +112,14 @@ const Achievements = () => {
                   href={achievement.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="glass glass-hover rounded-2xl p-6 relative overflow-hidden group-hover:shadow-lg transition-all duration-300 flex-1"
+                  className="animated-card glass glass-hover relative flex-1 overflow-hidden rounded-2xl p-5 text-center transition-all duration-300 group-hover:shadow-lg sm:p-6 sm:text-left"
                 >
                   {/* Background Gradient */}
                   <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
                   {/* Content */}
                   <div className="relative">
-                    <h3 className="text-xl font-bold text-foreground mb-2">
+                    <h3 className="mb-2 text-lg font-bold leading-tight text-foreground sm:text-xl">
                       {achievement.title}
                     </h3>
                     <p className="text-primary font-medium mb-2">
@@ -123,7 +131,7 @@ const Achievements = () => {
                     
                     {/* View Certificate Button */}
                     <div className="mt-4">
-                      <span className="inline-block px-4 py-2 bg-primary text-white font-semibold rounded-lg shadow hover:bg-accent transition-colors duration-200">
+                      <span className="inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow transition-colors duration-200 hover:bg-accent sm:text-base">
                         View Certificate
                       </span>
                     </div>

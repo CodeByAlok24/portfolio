@@ -1,12 +1,17 @@
 import { motion } from 'framer-motion';
-import { Github, Linkedin, Mail } from 'lucide-react';
+import { Github, Linkedin, Mail, Rocket, ShieldCheck, Sparkles } from 'lucide-react';
 import profileImg from '@/assets/profile.jpg';
 
 const About = () => {
   const socialLinks = [
-    { icon: Github, href: 'https://github.com/CodeByAlok24/Portfolio', label: 'GitHub' },
-    { icon: Linkedin, href: 'https://www.linkedin.com/in/alok-kumar-das-590885294/', label: 'LinkedIn' },
+    { icon: Github, href: 'https://github.com/CodeByAlok24', label: 'GitHub' },
+    { icon: Linkedin, href: 'https://linkedin.com/in/alok-kumar-das', label: 'LinkedIn' },
     { icon: Mail, href: 'mailto:alok.officials.25@gmail.com', label: 'Email' },
+  ];
+  const strengths = [
+    { icon: Rocket, title: 'Product Thinking', text: 'I turn vague ideas into clear, responsive interfaces with practical flows.' },
+    { icon: ShieldCheck, title: 'Reliable Delivery', text: 'I care about clean components, readable code, and smooth handoff.' },
+    { icon: Sparkles, title: 'AI-Aware Builds', text: 'I use prompt engineering to speed research, iteration, and better UX decisions.' },
   ];
 
   return (
@@ -53,20 +58,35 @@ const About = () => {
             transition={{ duration: 0.6 }}
             className="space-y-6"
           >
-            <div className="glass rounded-2xl p-8">
+            <div className="animated-card glass rounded-2xl p-8">
               <p className="text-lg text-foreground/90 mb-4 leading-relaxed">
-              I'm a passionate <span className="font-semibold">Front-End Developer</span> and 
-              <span className="font-semibold"> Prompt Engineer</span> with a deep enthusiasm for creating 
-              seamless, visually engaging, and intelligent digital experiences. 
-              My journey in technology is driven by curiosity, creativity, and a desire 
-              to bridge the gap between humans and technology through thoughtful design and AI-driven solutions.
-            </p>
+                I am a <span className="font-semibold text-primary">Computer Science student at IIIT Dharwad</span> and
+                <span className="font-semibold text-primary"> AI / Full-Stack Developer</span> building
+                polished products with React, TypeScript, Node.js, Express, MongoDB, and modern AI workflows.
+                My work is driven by clear interfaces, secure engineering, and practical problem solving.
+              </p>
 
-            <p className="text-lg text-foreground/90 leading-relaxed">
-              Beyond coding, I am an avid learner and collaborator, always eager to explore and 
-              contribute to innovative projects. Let's connect and create something amazing together!
-            </p>
+              <p className="text-lg text-foreground/90 leading-relaxed">
+                Recent work includes an automated test generation platform, a movie ticket booking
+                app, and a campus lost-and-found marketplace. I like collaborating with teams that
+                value ownership, strong communication, and user-focused execution.
+              </p>
+            </div>
 
+            <div className="grid gap-3">
+              {strengths.map((item) => (
+                <div key={item.title} className="animated-card glass rounded-xl p-4">
+                  <div className="flex items-start gap-3">
+                    <div className="rounded-lg bg-primary/10 p-2 text-primary">
+                      <item.icon size={20} />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-foreground">{item.title}</h3>
+                      <p className="text-sm leading-6 text-muted-foreground">{item.text}</p>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
 
             {/* Social Links */}
@@ -82,7 +102,7 @@ const About = () => {
                   viewport={{ once: true }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ scale: 1.1, y: -5 }}
-                  className="glass glass-hover rounded-xl p-4 flex items-center justify-center"
+                  className="glass glass-hover spread-hover rounded-xl p-4 flex items-center justify-center"
                   aria-label={social.label}
                 >
                   <social.icon className="text-primary" size={24} />

@@ -4,39 +4,31 @@ import { Button } from '@/components/ui/button';
 
 const projects = [
   {
-    title: 'Service-based E-Commerce Application',
-    description: [
-      'A full-stack movie ticket booking web app that enables users to browse movies, select seats, and book tickets online with secure payments.It offers real-time updates, responsive design, and seamless user experience powered by modern web technologies.',
-    ],
-    tech: ['React', 'Node.js', 'MongoDB', 'Stripe/payments', 'Tailwind', 'Express.js', 'JWT'],
+    title: 'TestGen-AI',
+    description:
+      'Automated test generation platform that creates acceptance and system test cases from source code, descriptions, user stories, and exportable self-healing reports.',
+    tech: ['React 19', 'Vite', 'Framer Motion', 'Monaco Editor', 'Node.js', 'Express', 'MongoDB', 'Docker'],
+    image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&h=600&fit=crop',
+    github: 'https://github.com/CodeByAlok24/TestGen-AI',
+    demo: '',
+  },
+  {
+    title: 'CineGharShow Ticket Booking',
+    description:
+      'Movie ticket booking app with interactive seat maps, Stripe/Razorpay payments, admin dashboards, revenue analytics, Cloudinary media, and instant confirmation emails.',
+    tech: ['React.js', 'Tailwind CSS', 'Express.js', 'JWT', 'Stripe', 'Razorpay', 'Nodemailer', 'Cloudinary'],
     image: 'https://cdn.dribbble.com/userupload/3030996/file/original-0ee71c0fe6413f57e8fc16a52b20a708.png?resize=752x&vertical=center',
     github: 'https://github.com/CodeByAlok24/CineGharShow',
-    demo: 'https://example.com',
-  },
-
-  {
-    title: 'AI-Powered Analytics Dashboard',
-    description: 'Real-time data visualization platform with machine learning predictions and automated reporting.',
-    tech: ['React', 'Python', 'TensorFlow', 'D3.js'],
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&h=600&fit=crop',
-    github: 'https://github.com',
-    demo: 'https://example.com',
+    demo: '',
   },
   {
-    title: 'Social Media App',
-    description: 'Mobile-first social networking platform with real-time messaging, media sharing, and user analytics.',
-    tech: ['React Native', 'Firebase', 'Redux', 'WebSocket'],
-    image: 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=800&h=600&fit=crop',
-    github: 'https://github.com',
-    demo: 'https://example.com',
-  },
-  {
-    title: 'Task Management System',
-    description: 'Collaborative project management tool with Kanban boards, time tracking, and team collaboration features.',
-    tech: ['Next.js', 'MongoDB', 'Socket.io', 'Tailwind'],
-    image: 'https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?w=800&h=600&fit=crop',
-    github: 'https://github.com',
-    demo: 'https://example.com',
+    title: 'Lost-Listed',
+    description:
+      'Campus lost-and-found platform for item reporting, student marketplace exchanges, real-time activity updates, user management, and image uploads.',
+    tech: ['React', 'TypeScript', 'Redux', 'Cloudinary', 'MongoDB'],
+    image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop',
+    github: 'https://github.com/CodeByAlok24/Lost-Listed',
+    demo: '',
   },
 ];
 
@@ -57,7 +49,7 @@ const Projects = () => {
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto" />
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl mx-auto">
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 max-w-6xl mx-auto">
           {projects.map((project, index) => (
             <motion.div
               key={project.title}
@@ -65,8 +57,8 @@ const Projects = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -10, rotateX: 5 }}
-              className="glass glass-hover rounded-2xl overflow-hidden group"
+              whileHover={{ y: -6 }}
+              className="animated-card glass glass-hover rounded-2xl overflow-hidden group"
             >
               {/* Project Image */}
               <div className="relative h-48 overflow-hidden">
@@ -79,8 +71,11 @@ const Projects = () => {
               </div>
 
               {/* Project Details */}
-              <div className="p-6">
-                <h3 className="text-2xl font-bold mb-3 text-foreground">
+              <div className="p-5 sm:p-6">
+                <p className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-primary/80">
+                  Featured build
+                </p>
+                <h3 className="text-xl font-bold mb-3 text-foreground sm:text-2xl">
                   {project.title}
                 </h3>
                 <p className="text-foreground/80 mb-4 leading-relaxed">
@@ -100,11 +95,11 @@ const Projects = () => {
                 </div>
 
                 {/* Action Buttons */}
-                <div className="flex gap-3">
+                <div className="flex flex-col gap-3 sm:flex-row">
                   <Button
                     variant="outline"
                     size="sm"
-                    className="border-primary text-primary hover:bg-primary/10"
+                    className="spread-hover w-full border-primary text-primary hover:bg-primary/10 sm:w-auto"
                     asChild
                   >
                     <a href={project.github} target="_blank" rel="noopener noreferrer">
@@ -112,16 +107,29 @@ const Projects = () => {
                       Code
                     </a>
                   </Button>
-                  <Button
-                    size="sm"
-                    className="bg-primary hover:bg-primary/90 text-primary-foreground"
-                    asChild
-                  >
-                    <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                      <ExternalLink size={16} className="mr-2" />
-                      Live Demo
-                    </a>
-                  </Button>
+                  {project.demo ? (
+                    <Button
+                      size="sm"
+                      className="spread-hover w-full bg-primary hover:bg-primary/90 text-primary-foreground sm:w-auto"
+                      asChild
+                    >
+                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
+                        <ExternalLink size={16} className="mr-2" />
+                        Live Demo
+                      </a>
+                    </Button>
+                  ) : (
+                    <Button
+                      size="sm"
+                      className="spread-hover w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground sm:w-auto"
+                      asChild
+                    >
+                      <a href="#contact">
+                        <ExternalLink size={16} className="mr-2" />
+                        Discuss Project
+                      </a>
+                    </Button>
+                  )}
                 </div>
               </div>
             </motion.div>

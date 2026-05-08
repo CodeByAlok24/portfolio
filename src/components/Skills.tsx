@@ -5,7 +5,6 @@ import { Code2, Database, Wrench, Users } from 'lucide-react';
 import { 
   SiJavascript, 
   SiTypescript, 
-  SiPython, 
   SiHtml5, 
   SiCss3, 
   SiMysql,
@@ -13,11 +12,11 @@ import {
   SiNodedotjs, 
   SiExpress, 
   SiNextdotjs, 
-  SiDjango, 
   SiGit,  
-  SiGooglecloud, 
   SiPostgresql, 
   SiMongodb, 
+  SiRedis,
+  SiDocker,
 } from 'react-icons/si';
 
 const skillCategories = [
@@ -27,7 +26,7 @@ const skillCategories = [
     skills: [
       { name: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
       { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
-      { name: 'Python', icon: SiPython, color: '#3776AB' },
+      { name: 'C++', icon: null, color: null },
       { name: 'HTML', icon: SiHtml5, color: '#E34F26' },
       { name: 'CSS', icon: SiCss3, color: '#1572B6' },
       { name: 'SQL', icon: SiMysql, color: '#4479A1' }
@@ -42,7 +41,7 @@ const skillCategories = [
       { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
       { name: 'Express', icon: SiExpress, color: '#000000' },
       { name: 'Next.js', icon: SiNextdotjs, color: '#000000' },
-      { name: 'Django', icon: SiDjango, color: '#092E20' },
+      { name: 'Tailwind CSS', icon: null, color: null },
     ],
     color: 'from-accent to-secondary',
   },
@@ -51,9 +50,13 @@ const skillCategories = [
   icon: Wrench,
   skills: [
     { name: 'Git', icon: SiGit, color: '#F05032' },
-    { name: 'Google Cloud', icon: SiGooglecloud, color: '#4285F4' }, // Google Cloud icon here!
+    { name: 'GitHub Actions', icon: null, color: null },
+    { name: 'Docker', icon: SiDocker, color: '#2496ED' },
+    { name: 'AWS', icon: null, color: null },
     { name: 'PostgreSQL', icon: SiPostgresql, color: '#336791' },
     { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
+    { name: 'Redis', icon: SiRedis, color: '#DC382D' },
+    { name: 'RabbitMQ', icon: null, color: null },
   ],
   color: 'from-secondary to-primary',
 },
@@ -97,7 +100,7 @@ const Skills = () => {
               viewport={{ once: true }}
               transition={{ delay: categoryIndex * 0.1 }}
               whileHover={{ y: -10 }}
-              className="glass glass-hover rounded-2xl p-6 relative overflow-hidden group"
+              className="animated-card glass glass-hover rounded-2xl p-6 relative overflow-hidden group"
             >
               {/* Gradient Background */}
               <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />

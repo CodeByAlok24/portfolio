@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Code2, Menu, X } from 'lucide-react';
 
 const navItems = [
   { name: 'Home', href: '#home' },
@@ -48,23 +48,26 @@ const Navbar = () => {
         isScrolled ? 'glass shadow-glass' : 'bg-transparent'
       }`}
     >
-      <div className="container mx-auto px-4 py-4">
+      <div className="container mx-auto px-4 py-3 sm:py-4">
         <div className="flex items-center justify-between">
           <motion.a
             href="#home"
-            className="text-2xl font-bold gradient-text"
+            className="flex items-center gap-2 text-lg font-bold text-foreground sm:text-xl"
             whileHover={{ scale: 1.05 }}
           >
-            Portfolio
+            <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary shadow-glow">
+              <Code2 size={21} />
+            </span>
+            <span className="gradient-text">Alok.dev</span>
           </motion.a>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center rounded-full border border-border/60 bg-card/45 px-3 py-2 backdrop-blur-xl">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className={`relative transition-colors ${
+                className={`relative rounded-full px-3 py-2 text-sm transition-colors ${
                   activeSection === item.href.slice(1)
                     ? 'text-primary'
                     : 'text-foreground hover:text-primary'
@@ -83,8 +86,9 @@ const Navbar = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden text-foreground"
+            className="spread-hover md:hidden rounded-lg border border-border/60 bg-card/60 p-2 text-foreground backdrop-blur"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            aria-label="Toggle navigation menu"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
@@ -95,7 +99,7 @@ const Navbar = () => {
           <motion.div
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="md:hidden mt-4 glass rounded-lg p-4"
+            className="md:hidden mt-4 max-h-[calc(100vh-5.5rem)] overflow-y-auto glass rounded-lg p-4"
           >
             {navItems.map((item) => (
               <a
