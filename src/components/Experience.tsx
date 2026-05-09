@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Briefcase, CalendarDays, Trophy } from 'lucide-react';
+import { Briefcase, CalendarDays, Code2, Trophy } from 'lucide-react';
 
 type ExperienceItem = {
   title: string;
@@ -8,10 +8,22 @@ type ExperienceItem = {
   period: string;
   description: string[];
   logo: string;
-  type: 'Achievement' | 'Internship' | 'Training' | 'Volunteer';
+  type: 'Achievement' | 'Internship' | 'Training' | 'Volunteer' | 'Open Source';
 };
 
 const experiences: ExperienceItem[] = [
+  {
+    title: 'Open Source Contributor',
+    company: 'Open Source Community',
+    period: 'May 2026 - Present',
+    type: 'Open Source',
+    description: [
+      'Contributing to public repositories through issue fixes, documentation improvements, and feature-focused pull requests.',
+      'Practicing collaborative development workflows with Git, GitHub, code reviews, and maintainable commit history.',
+      'Improving production-readiness by reading existing codebases, following project conventions, and shipping focused changes.',
+    ],
+    logo: '/images/OpenSourceContributor.svg',
+  },
   {
     title: 'Runner-Up - Agentica 2.0 Hackathon',
     company: 'Agentica 2.0 Hackathon',
@@ -77,7 +89,11 @@ const experiences: ExperienceItem[] = [
 
 const ExperienceLogo = ({ exp }: { exp: ExperienceItem }) => {
   const [imgError, setImgError] = useState(false);
-  const FallbackIcon = exp.type === 'Achievement' ? Trophy : Briefcase;
+  const FallbackIcon = exp.type === 'Achievement'
+    ? Trophy
+    : exp.type === 'Open Source'
+      ? Code2
+      : Briefcase;
 
   return (
     <motion.div
@@ -151,7 +167,7 @@ const Experience = () => (
         transition={{ duration: 0.6 }}
         className="mb-16 text-center"
       >
-        <h2 className="mb-4 text-4xl font-bold gradient-text md:text-5xl">
+        <h2 className="mb-4 text-3xl font-bold gradient-text md:text-4xl">
           Work Experience
         </h2>
         <div className="mx-auto mb-5 h-1 w-24 bg-gradient-to-r from-primary to-secondary" />

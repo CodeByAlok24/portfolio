@@ -13,7 +13,7 @@ import CodingBackground from '@/components/CodingBackground';
 
 const Index = () => {
   return (
-    <div className="relative min-h-screen overflow-hidden">
+    <div className="relative min-h-screen w-full max-w-full overflow-x-hidden">
       <CodingBackground />
       <Navbar />
       <main className="relative z-10">

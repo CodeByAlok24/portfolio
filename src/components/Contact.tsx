@@ -5,7 +5,6 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { useToast } from '@/hooks/use-toast';
-import emailjs from '@emailjs/browser'; 
 
 const contactInfo = [
   {
@@ -28,16 +27,7 @@ const contactInfo = [
   },
 ];
 
-// These come from .env at project root (NOT in src), with VITE_ prefix
-const EMAILJS_SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID as string;
-const EMAILJS_TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID as string;
-const EMAILJS_PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY as string;
-
 const getErrorMessage = (err: unknown) => {
-  if (typeof err === 'object' && err !== null && 'text' in err && typeof err.text === 'string') {
-    return err.text;
-  }
-
   if (err instanceof Error) {
     return err.message;
   }
@@ -79,21 +69,23 @@ const Contact = () => {
     try {
       setIsSubmitting(true);
 
-      // EmailJS expects keys matching the template keys in dashboard
-      const templateParams = {
-        name: formData.name,
-        email: formData.email,
-        message: formData.message,
-        to_name: 'Alok',
-        reply_to: formData.email
-      };
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: formData.name,
+          email: formData.email,
+          message: formData.message,
+        }),
+      });
 
-      await emailjs.send(
-        EMAILJS_SERVICE_ID,
-        EMAILJS_TEMPLATE_ID,
-        templateParams,
-        EMAILJS_PUBLIC_KEY
-      );
+      const result = await response.json().catch(() => null);
+
+      if (!response.ok) {
+        throw new Error(result?.message || 'Please try again later or email me directly.');
+      }
 
       toast({
         title: 'Message sent!',
@@ -105,7 +97,7 @@ const Contact = () => {
       formRef.current?.reset();
     } catch (err: unknown) {
       const message = getErrorMessage(err);
-      console.error('EmailJS error:', message);
+      console.error('Contact form error:', message);
       toast({
         title: 'Failed to send',
         description: message,
@@ -125,7 +117,7 @@ const Contact = () => {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <h2 className="text-4xl md:text-5xl font-bold mb-4 gradient-text">
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
             Get In Touch
           </h2>
           <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-4" />
