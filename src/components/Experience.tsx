@@ -99,7 +99,7 @@ const ExperienceLogo = ({ exp }: { exp: ExperienceItem }) => {
     <motion.div
       whileHover={{ scale: 1.06 }}
       transition={{ duration: 0.25 }}
-      className="relative z-10 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl border border-primary/25 bg-background/90 p-2 shadow-glow md:h-20 md:w-20"
+      className="relative z-10 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-white/[0.06] backdrop-blur-xl border border-white/[0.1] p-2 shadow-[0_8px_32px_rgba(0,0,0,0.3)] md:h-20 md:w-20"
     >
       {exp.logo && !imgError ? (
         <img
@@ -109,7 +109,7 @@ const ExperienceLogo = ({ exp }: { exp: ExperienceItem }) => {
           onError={() => setImgError(true)}
         />
       ) : (
-        <FallbackIcon className="h-8 w-8 text-primary" />
+        <FallbackIcon className="h-8 w-8 text-white/70" />
       )}
     </motion.div>
   );
@@ -117,23 +117,23 @@ const ExperienceLogo = ({ exp }: { exp: ExperienceItem }) => {
 
 const ExperienceCard = ({ exp }: { exp: ExperienceItem }) => {
   return (
-    <div className="animated-card group relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-5 shadow-glass backdrop-blur-xl transition-all duration-300 hover:-translate-y-1 hover:border-primary/35 hover:shadow-glow sm:p-6">
-      <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary opacity-80" />
-      <div className="absolute right-0 top-0 h-28 w-28 rounded-bl-full bg-primary/5 transition-colors group-hover:bg-primary/10" />
+    <div className="animated-card group relative overflow-hidden rounded-2xl bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] p-5 shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.06] hover:border-white/[0.12] hover:shadow-[0_12px_48px_rgba(0,0,0,0.4)] sm:p-6">
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-60" />
 
       <div className="relative flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
         <div>
-          <span className="mb-3 inline-flex rounded-full border border-primary/20 bg-primary/10 px-3 py-1 text-xs font-semibold uppercase tracking-[0.18em] text-primary">
+          <span className="mb-3 inline-flex items-center gap-1.5 rounded-full bg-white/[0.06] backdrop-blur-sm border border-white/[0.08] px-3 py-1 text-xs font-medium uppercase tracking-[0.12em] text-white/50">
+            <span className="w-1 h-1 rounded-full bg-white/30" />
             {exp.type}
           </span>
-          <h3 className="text-xl font-bold leading-tight text-foreground sm:text-2xl">
+          <h3 className="text-xl font-bold leading-tight text-white/90 sm:text-2xl">
             {exp.title}
           </h3>
-          <p className="mt-2 font-medium text-primary">{exp.company}</p>
+          <p className="mt-2 font-medium text-white/60">{exp.company}</p>
         </div>
 
-        <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border/70 bg-background/50 px-3 py-2 text-xs text-muted-foreground sm:px-4 sm:text-sm">
-          <CalendarDays size={16} className="text-accent" />
+        <div className="inline-flex w-fit items-center gap-2 rounded-full bg-white/[0.04] backdrop-blur-sm border border-white/[0.06] px-3 py-2 text-xs text-white/40 sm:px-4 sm:text-sm">
+          <CalendarDays size={14} className="text-white/30" />
           {exp.period}
         </div>
       </div>
@@ -146,9 +146,9 @@ const ExperienceCard = ({ exp }: { exp: ExperienceItem }) => {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ delay: index * 0.07 }}
-            className="flex items-start gap-3 text-foreground/80"
+            className="flex items-start gap-3 text-white/60"
           >
-            <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-primary shadow-glow" />
+            <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-white/30 shadow-[0_0_8px_rgba(255,255,255,0.15)]" />
             <span className="leading-relaxed">{item}</span>
           </motion.li>
         ))}
@@ -157,27 +157,53 @@ const ExperienceCard = ({ exp }: { exp: ExperienceItem }) => {
   );
 };
 
+const SectionFloaters = () => (
+  <>
+    <motion.div
+      className="absolute top-24 right-12 w-16 h-16 rounded-full border border-white/[0.03] pointer-events-none"
+      animate={{ y: [0, -18, 0], rotate: [0, 180, 360] }}
+      transition={{ duration: 20, repeat: Infinity, ease: 'easeInOut' }}
+    />
+    <motion.div
+      className="absolute bottom-32 left-10 w-8 h-8 rounded-full bg-white/[0.02] blur-sm pointer-events-none"
+      animate={{ y: [0, 12, 0], x: [0, -8, 0] }}
+      transition={{ duration: 15, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
+    />
+    <motion.div
+      className="absolute top-1/2 right-1/3 w-1 h-1 rounded-full bg-white/[0.05] pointer-events-none"
+      animate={{ y: [0, -25, 0], opacity: [0.2, 0.6, 0.2] }}
+      transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+    />
+  </>
+);
+
 const Experience = () => (
-  <section id="experience" className="relative py-20 md:py-32">
+  <section id="experience" className="relative py-16 md:py-32 overflow-hidden">
+    <SectionFloaters />
     <div className="container mx-auto px-4">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
-        transition={{ duration: 0.6 }}
-        className="mb-16 text-center"
-      >
-        <h2 className="mb-4 text-3xl font-bold gradient-text md:text-4xl">
+      <div className="max-w-5xl mx-auto mb-16">
+        <motion.h2
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+          className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white"
+        >
           Work Experience
-        </h2>
-        <div className="mx-auto mb-5 h-1 w-24 bg-gradient-to-r from-primary to-secondary" />
-        <p className="mx-auto max-w-2xl text-foreground/75">
+        </motion.h2>
+        <motion.p
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+          className="mt-4 text-lg text-white/50 max-w-2xl"
+        >
           A snapshot of internships, training, and event wins that shaped how I build, collaborate, and ship.
-        </p>
-      </motion.div>
+        </motion.p>
+      </div>
 
       <div className="relative mx-auto max-w-5xl">
-        <div className="absolute left-8 top-4 hidden h-[calc(100%-2rem)] w-px bg-gradient-to-b from-primary/70 via-border to-transparent md:block" />
+        <div className="absolute left-8 top-4 hidden h-[calc(100%-2rem)] w-px bg-gradient-to-b from-white/30 via-white/10 to-transparent md:block" />
 
         <div className="space-y-8">
           {experiences.map((exp, index) => (

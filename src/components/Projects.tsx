@@ -1,167 +1,174 @@
 import { motion } from 'framer-motion';
 import { ExternalLink, Github } from 'lucide-react';
-import { Button } from '@/components/ui/button';
+import Reveal from './Reveal';
 
 const projects = [
   {
-    title: 'NativeHarvest',
-    category: 'Research project',
-    description:
-      'XAI framework for Indian crop mapping using Sentinel-1/2 fusion, Attention-LSTM modeling, and SHAP explanations for Rabi crop detection.',
-    highlights: ['80.8% Rabi crop accuracy', '6.70% spatial error', 'SHAP Jan-Mar phenology insights'],
-    tech: ['PyTorch', 'SHAP', 'GeoPandas', 'Google Earth Engine', 'Sentinel-1/2', 'Streamlit'],
-    image: 'https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=800&h=600&fit=crop',
-    github: 'https://github.com/CodeByAlok24',
-    demo: '',
-  },
-  {
     title: 'TestGen-AI',
-    category: 'Featured build',
     description:
       'Automated test generation platform that creates acceptance and system test cases from source code, descriptions, user stories, and exportable self-healing reports.',
-    highlights: ['Self-healing reports', 'Acceptance and system tests', 'Developer productivity flow'],
     tech: ['React 19', 'Vite', 'Framer Motion', 'Monaco Editor', 'Node.js', 'Express', 'MongoDB', 'Docker'],
-    image: 'https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=800&h=600&fit=crop',
     github: 'https://github.com/CodeByAlok24/TestGen-AI',
     demo: '',
   },
   {
-    title: 'CineGharShow Ticket Booking',
-    category: 'Featured build',
+    title: 'HAQMS',
+    description:
+      'Hospital Appointment Queue and Management System with real-time queue tracking, appointment scheduling, role-based dashboards, and instant status updates.',
+    tech: ['Next.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Socket.IO', 'JWT', 'Vercel'],
+    github: 'https://github.com/CodeByAlok24',
+    demo: '',
+  },
+  {
+    title: 'CineGharShow',
     description:
       'Movie ticket booking app with interactive seat maps, Stripe/Razorpay payments, admin dashboards, revenue analytics, Cloudinary media, and instant confirmation emails.',
-    highlights: ['Interactive seat maps', 'Payment-ready booking', 'Admin analytics'],
     tech: ['React.js', 'Tailwind CSS', 'Express.js', 'JWT', 'Stripe', 'Razorpay', 'Nodemailer', 'Cloudinary'],
-    image: 'https://cdn.dribbble.com/userupload/3030996/file/original-0ee71c0fe6413f57e8fc16a52b20a708.png?resize=752x&vertical=center',
     github: 'https://github.com/CodeByAlok24/CineGharShow',
     demo: '',
   },
   {
+    title: 'NativeHarvest',
+    description:
+      'XAI framework for Indian crop mapping using Sentinel-1/2 fusion, Attention-LSTM modeling, and SHAP explanations for Rabi crop detection.',
+    tech: ['PyTorch', 'SHAP', 'GeoPandas', 'Google Earth Engine', 'Streamlit'],
+    github: 'https://github.com/CodeByAlok24',
+    demo: '',
+  },
+  {
     title: 'Lost-Listed',
-    category: 'Featured build',
     description:
       'Campus lost-and-found platform for item reporting, student marketplace exchanges, real-time activity updates, user management, and image uploads.',
-    highlights: ['Campus item reporting', 'Marketplace exchanges', 'Real-time activity'],
     tech: ['React', 'TypeScript', 'Redux', 'Cloudinary', 'MongoDB'],
-    image: 'https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=800&h=600&fit=crop',
     github: 'https://github.com/CodeByAlok24/Lost-Listed',
     demo: '',
   },
 ];
 
+const ProjectBlock = ({ project, index }: { project: typeof projects[0]; index: number }) => {
+  const isEven = index % 2 === 0;
+  const number = String(index + 1).padStart(2, '0');
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true, margin: '-100px' }}
+      transition={{ duration: 0.6 }}
+      className="relative group w-full py-16 md:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
+      style={{ background: isEven ? '#0a0a0a' : '#0e0e0e' }}
+    >
+      <motion.div
+        className="absolute top-16 right-12 w-20 h-20 rounded-full border border-white/[0.03] pointer-events-none"
+        animate={{ y: [0, -20, 0], rotate: [0, 180, 360] }}
+        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
+      />
+      <motion.div
+        className="absolute bottom-20 left-8 w-10 h-10 rounded-full bg-white/[0.02] blur-sm pointer-events-none"
+        animate={{ y: [0, 15, 0], x: [0, 10, 0] }}
+        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
+      />
+      <motion.div
+        className="absolute top-1/3 right-1/4 w-1.5 h-1.5 rounded-full bg-white/[0.05] pointer-events-none"
+        animate={{ y: [0, -30, 0], opacity: [0.2, 0.7, 0.2] }}
+        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
+      />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
+        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.015] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
+      </div>
+
+      <Reveal delay={0.1}>
+        <div className="max-w-7xl mx-auto">
+          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
+            <div>
+              <motion.span
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+                className="block text-sm font-mono text-white/15 mb-3"
+              >
+                {number}
+              </motion.span>
+              <h3 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white">
+                {project.title}
+              </h3>
+            </div>
+            <div className="space-y-6">
+              <p className="text-base sm:text-lg leading-relaxed text-white/55">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {project.tech.map((tech, i) => (
+                  <motion.span
+                    key={tech}
+                    initial={{ opacity: 0, y: 10 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.3 + i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+                    className="px-3 py-1.5 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full"
+                  >
+                    {tech}
+                  </motion.span>
+                ))}
+              </div>
+              <motion.div
+                initial={{ opacity: 0, y: 10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 + project.tech.length * 0.05, duration: 0.4 }}
+                className="flex gap-6 pt-2"
+              >
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full hover:bg-white/[0.08] hover:text-white transition-all duration-300"
+                >
+                  <Github size={14} />
+                  View Code
+                </a>
+                {project.demo ? (
+                  <a
+                    href={project.demo}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full hover:bg-white/[0.08] hover:text-white transition-all duration-300"
+                  >
+                    <ExternalLink size={14} />
+                    Live Demo
+                  </a>
+                ) : (
+                  <a
+                    href="#contact"
+                    className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full hover:bg-white/[0.08] hover:text-white transition-all duration-300"
+                  >
+                    <ExternalLink size={14} />
+                    Discuss Project
+                  </a>
+                )}
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </Reveal>
+    </motion.div>
+  );
+};
+
 const Projects = () => {
   return (
-    <section id="projects" className="py-20 md:py-32 relative">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-            Featured Projects
+    <section id="projects">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-32 pb-4">
+        <Reveal>
+          <h2 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white">
+            Projects
           </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto" />
-        </motion.div>
-
-        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 max-w-6xl mx-auto">
-          {projects.map((project, index) => (
-            <motion.div
-              key={project.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
-              whileHover={{ y: -6 }}
-              className="animated-card glass glass-hover rounded-2xl overflow-hidden group"
-            >
-              {/* Project Image */}
-              <div className="relative h-48 overflow-hidden">
-                <img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background/90 to-transparent" />
-              </div>
-
-              {/* Project Details */}
-              <div className="p-5 sm:p-6">
-                <p className="mb-3 font-mono text-xs uppercase tracking-[0.22em] text-primary/80">
-                  {project.category}
-                </p>
-                <h3 className="text-xl font-bold mb-3 text-foreground sm:text-2xl">
-                  {project.title}
-                </h3>
-                <p className="text-foreground/80 mb-4 leading-relaxed">
-                  {project.description}
-                </p>
-
-                <div className="mb-4 grid gap-2">
-                  {project.highlights.map((highlight) => (
-                    <div key={highlight} className="flex items-start gap-2 text-sm text-foreground/75">
-                      <span className="mt-2 h-1.5 w-1.5 flex-shrink-0 rounded-full bg-accent" />
-                      <span>{highlight}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Tech Stack */}
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {project.tech.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-3 py-1 text-sm bg-primary/10 text-primary rounded-full border border-primary/20"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex flex-col gap-3 sm:flex-row">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="spread-hover w-full border-primary text-primary hover:bg-primary/10 sm:w-auto"
-                    asChild
-                  >
-                    <a href={project.github} target="_blank" rel="noopener noreferrer">
-                      <Github size={16} className="mr-2" />
-                      Code
-                    </a>
-                  </Button>
-                  {project.demo ? (
-                    <Button
-                      size="sm"
-                      className="spread-hover w-full bg-primary hover:bg-primary/90 text-primary-foreground sm:w-auto"
-                      asChild
-                    >
-                      <a href={project.demo} target="_blank" rel="noopener noreferrer">
-                        <ExternalLink size={16} className="mr-2" />
-                        Live Demo
-                      </a>
-                    </Button>
-                  ) : (
-                    <Button
-                      size="sm"
-                      className="spread-hover w-full bg-secondary hover:bg-secondary/90 text-secondary-foreground sm:w-auto"
-                      asChild
-                    >
-                      <a href="#contact">
-                        <ExternalLink size={16} className="mr-2" />
-                        Discuss Project
-                      </a>
-                    </Button>
-                  )}
-                </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+        </Reveal>
       </div>
+      {projects.map((project, index) => (
+        <ProjectBlock key={project.title} project={project} index={index} />
+      ))}
     </section>
   );
 };

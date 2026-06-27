@@ -9,14 +9,14 @@ import Achievements from '@/components/Achievements';
 import Contact from '@/components/Contact';
 import Footer from '@/components/Footer';
 import ScrollToTop from '@/components/ScrollToTop';
-import CodingBackground from '@/components/CodingBackground';
+import ScrollProgress from '@/components/ScrollProgress';
 
 const Index = () => {
   return (
     <div className="relative min-h-screen w-full max-w-full overflow-x-hidden">
-      <CodingBackground />
+      <ScrollProgress />
       <Navbar />
-      <main className="relative z-10">
+      <main>
         <Hero />
         <About />
         <Skills />

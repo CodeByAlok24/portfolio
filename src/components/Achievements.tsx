@@ -68,22 +68,42 @@ const achievements = [
   },
 ];
 
+const SectionFloaters = () => (
+  <>
+    <motion.div
+      className="absolute top-16 right-20 w-12 h-12 rounded-full border border-white/[0.03] pointer-events-none"
+      animate={{ y: [0, -12, 0], rotate: [0, 120, 240] }}
+      transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut' }}
+    />
+    <motion.div
+      className="absolute bottom-28 left-12 w-7 h-7 rounded-full bg-white/[0.02] blur-sm pointer-events-none"
+      animate={{ y: [0, 14, 0], x: [0, -7, 0] }}
+      transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+    />
+    <motion.div
+      className="absolute top-2/3 right-1/4 w-1 h-1 rounded-full bg-white/[0.04] pointer-events-none"
+      animate={{ y: [0, -18, 0], opacity: [0.15, 0.55, 0.15] }}
+      transition={{ duration: 11, repeat: Infinity, ease: 'easeInOut', delay: 6 }}
+    />
+  </>
+);
+
 const Achievements = () => {
   return (
-    <section id="achievements" className="py-20 md:py-32 relative">
+    <section id="achievements" className="py-16 md:py-32 relative overflow-hidden">
+      <SectionFloaters />
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
+        <div className="mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white"
+          >
             Achievements & Certifications
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto" />
-        </motion.div>
+          </motion.h2>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {achievements.map((achievement, index) => (
@@ -96,49 +116,40 @@ const Achievements = () => {
               whileHover={{ y: -6, scale: 1.01 }}
               className="relative group cursor-pointer"
             >
-              {/* Flex container: Logo on left, Card on right with gap */}
-              <div className="flex flex-col items-stretch gap-4 sm:flex-row sm:items-center">
-                {/* Logo container - separate with white background */}
-                <div className="mx-auto flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl bg-white shadow-[0_0_16px_1px_rgba(5,183,255,0.15)] sm:mx-0 sm:h-20 sm:w-20">
+              <div className="flex flex-row items-stretch gap-3 sm:gap-4 sm:flex-row sm:items-center">
+                <div className="mx-auto flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-white/[0.08] backdrop-blur-md border border-white/[0.12] shadow-[0_8px_32px_rgba(0,0,0,0.2)] sm:mx-0 sm:h-20 sm:w-20">
                   <img
                     src={achievement.logo}
                     alt="logo"
-                    className="h-12 w-12 object-contain sm:h-14 sm:w-14"
+                    className="h-10 w-10 object-contain sm:h-14 sm:w-14"
                   />
                 </div>
 
-                {/* Main content card - separate from logo */}
                 <a
                   href={achievement.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="animated-card glass glass-hover relative flex-1 overflow-hidden rounded-2xl p-5 text-center transition-all duration-300 group-hover:shadow-lg sm:p-6 sm:text-left"
+                  className="animated-card group relative flex-1 overflow-hidden rounded-2xl bg-white/[0.04] backdrop-blur-2xl border border-white/[0.08] p-5 text-center shadow-[0_8px_32px_rgba(0,0,0,0.3)] transition-all duration-500 hover:-translate-y-1 hover:bg-white/[0.06] hover:border-white/[0.12] hover:shadow-[0_12px_48px_rgba(0,0,0,0.4)] sm:p-6 sm:text-left"
                 >
-                  {/* Background Gradient */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-accent/5 to-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-white/20 to-transparent opacity-60" />
 
-                  {/* Content */}
                   <div className="relative">
-                    <h3 className="mb-2 text-lg font-bold leading-tight text-foreground sm:text-xl">
+                    <h3 className="mb-2 text-lg font-bold leading-tight text-white/90 sm:text-xl">
                       {achievement.title}
                     </h3>
-                    <p className="text-primary font-medium mb-2">
+                    <p className="text-white/50 font-medium mb-2">
                       {achievement.organization}
                     </p>
-                    <p className="text-muted-foreground text-sm mb-4">
+                    <p className="text-white/30 text-sm mb-4">
                       {achievement.date}
                     </p>
                     
-                    {/* View Certificate Button */}
                     <div className="mt-4">
-                      <span className="inline-block rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-white shadow transition-colors duration-200 hover:bg-accent sm:text-base">
+                      <span className="inline-block rounded-lg bg-white/[0.08] backdrop-blur-sm border border-white/[0.12] px-4 py-2 text-sm font-medium text-white/70 shadow transition-all duration-300 hover:bg-white/[0.12] hover:text-white">
                         View Certificate
                       </span>
                     </div>
                   </div>
-
-                  {/* Hover Effect */}
-                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary scale-x-0 group-hover:scale-x-100 transition-transform duration-300 origin-left" />
                 </a>
               </div>
             </motion.div>

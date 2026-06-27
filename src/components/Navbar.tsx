@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Code2, Menu, X } from 'lucide-react';
 
 const navItems = [
@@ -22,103 +22,98 @@ const Navbar = () => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 50);
 
-      // Update active section based on scroll position
       const sections = navItems.map(item => item.href.slice(1));
       for (const section of sections) {
         const element = document.getElementById(section);
         if (element) {
           const rect = element.getBoundingClientRect();
-          if (rect.top <= 100 && rect.bottom >= 100) {
+          if (rect.top <= 150 && rect.bottom >= 150) {
             setActiveSection(section);
             break;
           }
         }
       }
     };
-
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <motion.nav
-      initial={{ y: -100 }}
-      animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-        isScrolled ? 'glass shadow-glass' : 'bg-transparent'
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        isScrolled
+          ? 'bg-black/50 backdrop-blur-2xl border-b border-white/[0.06] shadow-[0_4px_30px_rgba(0,0,0,0.3)]'
+          : 'bg-black/10 backdrop-blur-md border-b border-transparent'
       }`}
     >
-      <div className="container mx-auto px-4 py-3 sm:py-4">
-        <div className="flex items-center justify-between">
-          <motion.a
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="relative flex items-center justify-center h-14">
+          <a
             href="#home"
-            className="flex items-center gap-2 text-lg font-bold text-foreground sm:text-xl"
-            whileHover={{ scale: 1.05 }}
+            className="absolute left-4 sm:left-6 lg:left-8 flex items-center gap-2 group"
           >
-            <span className="flex h-10 w-10 items-center justify-center rounded-lg border border-primary/30 bg-primary/10 text-primary shadow-glow">
-              <Code2 size={21} />
+            <div className="flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 transition-all duration-300 group-hover:bg-white/20">
+              <Code2 size={16} className="text-white/90" />
+            </div>
+            <span className="text-white/90 text-sm font-medium tracking-tight">Alok.dev</span>
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary/10 border border-primary/20">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary shadow-[0_0_6px_hsl(var(--primary)/0.5)]" />
+              <span className="hidden sm:inline text-[10px] text-primary/80 font-medium">Available</span>
             </span>
-            <span className="gradient-text">Alok.dev</span>
-          </motion.a>
+          </a>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center rounded-full border border-border/60 bg-card/45 px-3 py-2 backdrop-blur-xl">
+          <div className="hidden md:flex items-center gap-8">
             {navItems.map((item) => (
               <a
                 key={item.name}
                 href={item.href}
-                className={`relative rounded-full px-3 py-2 text-sm transition-colors ${
-                  activeSection === item.href.slice(1)
-                    ? 'text-primary'
-                    : 'text-foreground hover:text-primary'
-                }`}
+                className="relative text-[13px] text-white/50 hover:text-white transition-all duration-200 tracking-tight"
               >
                 {item.name}
                 {activeSection === item.href.slice(1) && (
-                  <motion.div
-                    layoutId="activeSection"
-                    className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary"
+                  <motion.span
+                    layoutId="activeDot"
+                    className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-white/60 shadow-[0_0_6px_rgba(255,255,255,0.4)]"
                   />
                 )}
               </a>
             ))}
           </div>
 
-          {/* Mobile Menu Button */}
           <button
-            className="spread-hover md:hidden rounded-lg border border-border/60 bg-card/60 p-2 text-foreground backdrop-blur"
+            className="md:hidden absolute right-4 sm:right-6 flex items-center justify-center w-8 h-8 rounded-lg bg-white/10 backdrop-blur-sm border border-white/20 text-white/80 transition-all duration-300 hover:bg-white/20"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            aria-label="Toggle navigation menu"
+            aria-label="Toggle menu"
           >
-            {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {isMobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
+      </div>
 
-        {/* Mobile Navigation */}
+      <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="md:hidden mt-4 max-h-[calc(100vh-5.5rem)] overflow-y-auto glass rounded-lg p-4"
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: 'auto' }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden bg-black/60 backdrop-blur-2xl border-t border-white/[0.06]"
           >
-            {navItems.map((item) => (
-              <a
-                key={item.name}
-                href={item.href}
-                className={`block py-2 transition-colors ${
-                  activeSection === item.href.slice(1)
-                    ? 'text-primary'
-                    : 'text-foreground hover:text-primary'
-                }`}
-                onClick={() => setIsMobileMenuOpen(false)}
-              >
-                {item.name}
-              </a>
-            ))}
+            <div className="px-4 py-3 space-y-1">
+              {navItems.map((item) => (
+                <a
+                  key={item.name}
+                  href={item.href}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="block text-[13px] text-white/60 hover:text-white py-2 transition-colors"
+                >
+                  {item.name}
+                </a>
+              ))}
+            </div>
           </motion.div>
         )}
-      </div>
-    </motion.nav>
+      </AnimatePresence>
+    </nav>
   );
 };
 

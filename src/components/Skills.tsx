@@ -1,147 +1,68 @@
 import { motion } from 'framer-motion';
-import { Code2, Database, Wrench, Users } from 'lucide-react';
+import Reveal from './Reveal';
 
-// Import react-icons for technology-specific icons
-import { 
-  SiJavascript, 
-  SiTypescript, 
-  SiHtml5, 
-  SiCss3, 
-  SiMysql,
-  SiReact, 
-  SiNodedotjs, 
-  SiExpress, 
-  SiNextdotjs, 
-  SiGit,  
-  SiPostgresql, 
-  SiMongodb, 
-  SiRedis,
-  SiDocker,
-} from 'react-icons/si';
-
-const skillCategories = [
+const skillGroups = [
   {
     title: 'Languages',
-    icon: Code2,
-    skills: [
-      { name: 'JavaScript', icon: SiJavascript, color: '#F7DF1E' },
-      { name: 'TypeScript', icon: SiTypescript, color: '#3178C6' },
-      { name: 'C++', icon: null, color: null },
-      { name: 'HTML', icon: SiHtml5, color: '#E34F26' },
-      { name: 'CSS', icon: SiCss3, color: '#1572B6' },
-      { name: 'SQL', icon: SiMysql, color: '#4479A1' }
-    ],
-    color: 'from-primary to-accent',
+    color: 'border-blue-500/20 bg-blue-500/8 text-blue-300',
+    skills: ['JavaScript', 'TypeScript', 'HTML/CSS', 'SQL', 'C++'],
   },
   {
-    title: 'Frameworks',
-    icon: Database,
-    skills: [
-      { name: 'React', icon: SiReact, color: '#61DAFB' },
-      { name: 'Node.js', icon: SiNodedotjs, color: '#339933' },
-      { name: 'Express', icon: SiExpress, color: '#000000' },
-      { name: 'Next.js', icon: SiNextdotjs, color: '#000000' },
-      { name: 'Tailwind CSS', icon: null, color: null },
-    ],
-    color: 'from-accent to-secondary',
+    title: 'Frameworks & Libraries',
+    color: 'border-emerald-500/20 bg-emerald-500/8 text-emerald-300',
+    skills: ['React', 'Node.js', 'Express', 'Next.js', 'Tailwind CSS'],
   },
   {
-  title: 'Tools',
-  icon: Wrench,
-  skills: [
-    { name: 'Git', icon: SiGit, color: '#F05032' },
-    { name: 'GitHub Actions', icon: null, color: null },
-    { name: 'Docker', icon: SiDocker, color: '#2496ED' },
-    { name: 'AWS', icon: null, color: null },
-    { name: 'PostgreSQL', icon: SiPostgresql, color: '#336791' },
-    { name: 'MongoDB', icon: SiMongodb, color: '#47A248' },
-    { name: 'Redis', icon: SiRedis, color: '#DC382D' },
-    { name: 'RabbitMQ', icon: null, color: null },
-  ],
-  color: 'from-secondary to-primary',
-},
-
+    title: 'Tools & Platforms',
+    color: 'border-purple-500/20 bg-purple-500/8 text-purple-300',
+    skills: ['Git', 'Docker', 'AWS', 'GitHub Actions', 'MongoDB', 'PostgreSQL', 'Redis', 'RabbitMQ'],
+  },
   {
-    title: 'Soft Skills',
-    icon: Users,
-    skills: [
-      { name: 'Team Leadership', icon: null, color: null },
-      { name: 'Communication', icon: null, color: null },
-      { name: 'Problem Solving', icon: null, color: null },
-      { name: 'Agile', icon: null, color: null },
-    ],
-    color: 'from-primary to-secondary',
+    title: 'Expertise',
+    color: 'border-amber-500/20 bg-amber-500/8 text-amber-300',
+    skills: ['Full-Stack Development', 'AI Integration', 'System Design', 'UI/UX Engineering'],
   },
 ];
 
 const Skills = () => {
   return (
-    <section id="skills" className="py-20 md:py-32 relative">
-      <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
-            Skills & Expertise
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto" />
-        </motion.div>
+    <section id="skills" className="py-24 md:py-32 border-t border-white/[0.04]">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid md:grid-cols-2 gap-16 md:gap-20">
+          <Reveal>
+            <h2 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white">
+              Skills & Expertise
+            </h2>
+          </Reveal>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
-          {skillCategories.map((category, categoryIndex) => (
-            <motion.div
-              key={category.title}
-              initial={{ opacity: 0, y: 50 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: categoryIndex * 0.1 }}
-              whileHover={{ y: -10 }}
-              className="animated-card glass glass-hover rounded-2xl p-6 relative overflow-hidden group"
-            >
-              {/* Gradient Background */}
-              <div className={`absolute inset-0 bg-gradient-to-br ${category.color} opacity-0 group-hover:opacity-10 transition-opacity duration-300`} />
-
-              {/* Icon */}
-              <div className="relative mb-4">
-                <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.color} p-3 shadow-glow`}>
-                  <category.icon className="w-full h-full text-white" />
-                </div>
-              </div>
-
-              {/* Title */}
-              <h3 className="text-xl font-bold mb-4 text-foreground relative">
-                {category.title}
-              </h3>
-
-              {/* Skills */}
-              <div className="space-y-3 relative">
-                {category.skills.map((skill, skillIndex) => (
-                  <motion.div
-                    key={skill.name}
-                    initial={{ opacity: 0, x: -20 }}
-                    whileInView={{ opacity: 1, x: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: categoryIndex * 0.1 + skillIndex * 0.05 }}
-                    className="flex items-center gap-3 group/skill hover:bg-white/5 rounded-lg p-2 transition-all duration-200"
-                  >
-                    {skill.icon ? (
-                      <skill.icon 
-                        className="w-5 h-5 transition-transform duration-200 group-hover/skill:scale-110" 
-                        style={{ color: skill.color }}
-                      />
-                    ) : (
-                      <div className="w-2 h-2 rounded-full bg-primary" />
-                    )}
-                    <span className="text-foreground/80 font-medium">{skill.name}</span>
-                  </motion.div>
-                ))}
-              </div>
-            </motion.div>
-          ))}
+          <Reveal delay={0.1}>
+            <div className="grid grid-cols-2 gap-10">
+              {skillGroups.map((group, i) => (
+                <motion.div
+                  key={group.title}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.2 + i * 0.1, duration: 0.6 }}
+                >
+                  <h3 className="text-sm font-semibold text-white/35 uppercase tracking-wider mb-4">
+                    {group.title}
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {group.skills.map((skill) => (
+                      <motion.span
+                        key={skill}
+                        whileHover={{ scale: 1.04, y: -1 }}
+                        className={`px-3 py-1.5 text-sm rounded-lg border ${group.color} transition-all duration-200 cursor-default`}
+                      >
+                        {skill}
+                      </motion.span>
+                    ))}
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

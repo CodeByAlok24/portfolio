@@ -68,13 +68,13 @@ export default {
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-hero': 'radial-gradient(ellipse at top, hsl(var(--primary)) 0%, hsl(var(--background)) 50%)',
+        'gradient-hero': 'radial-gradient(ellipse at top, hsl(var(--primary) / 0.4) 0%, hsl(var(--background)) 60%)',
       },
       boxShadow: {
-        'glow': '0 0 20px rgba(0, 217, 255, 0.3)',
-        'glow-lg': '0 0 40px rgba(0, 217, 255, 0.4)',
-        'glow-purple': '0 0 20px rgba(168, 85, 247, 0.3)',
-        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.37)',
+        'glow': '0 0 25px rgba(196, 149, 106, 0.3)',
+        'glow-lg': '0 0 50px rgba(196, 149, 106, 0.45)',
+        'glow-copper': '0 0 25px rgba(196, 149, 106, 0.35)',
+        'glass': '0 8px 32px 0 rgba(0, 0, 0, 0.5)',
       },
       borderRadius: {
         lg: "var(--radius)",

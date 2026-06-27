@@ -1,10 +1,25 @@
 import { useState, useRef } from 'react';
-import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { useToast } from '@/hooks/use-toast';
+
+const subjectOptions = [
+  { value: 'collaboration', label: 'Project Collaboration' },
+  { value: 'freelance', label: 'Freelance Work' },
+  { value: 'job', label: 'Job Opportunity' },
+  { value: 'mentorship', label: 'Mentorship' },
+  { value: 'other', label: 'Other' },
+];
 
 const contactInfo = [
   {
@@ -42,9 +57,11 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
+    subject: '',
     message: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isSuccess, setIsSuccess] = useState(false);
 
   const isValidEmail = (e: string) =>
     /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
@@ -59,6 +76,10 @@ const Contact = () => {
     }
     if (!isValidEmail(formData.email)) {
       toast({ title: 'Invalid email', description: 'Please enter a valid email.' });
+      return;
+    }
+    if (!formData.subject) {
+      toast({ title: 'Subject required', description: 'Please select a subject.' });
       return;
     }
     if (!formData.message.trim()) {
@@ -77,6 +98,7 @@ const Contact = () => {
         body: JSON.stringify({
           name: formData.name,
           email: formData.email,
+          subject: formData.subject,
           message: formData.message,
         }),
       });
@@ -93,7 +115,9 @@ const Contact = () => {
           "Thanks for reaching out. Let's collaborate - I'll get back to you shortly.",
       });
 
-      setFormData({ name: '', email: '', message: '' });
+      setIsSuccess(true);
+      setTimeout(() => setIsSuccess(false), 3000);
+      setFormData({ name: '', email: '', subject: '', message: '' });
       formRef.current?.reset();
     } catch (err: unknown) {
       const message = getErrorMessage(err);
@@ -108,25 +132,30 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-20 md:py-32 relative">
+    <section id="contact" className="py-16 md:py-32 relative">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-          className="text-center mb-16"
-        >
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 gradient-text">
+        <div className="mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+            className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white"
+          >
             Get In Touch
-          </h2>
-          <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-4" />
-          <p className="mx-auto max-w-2xl text-base text-foreground/80 sm:text-lg">
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
+            className="mt-4 text-lg text-white/50 max-w-2xl"
+          >
             Have a project in mind or want to collaborate? Feel free to reach out!
-          </p>
-        </motion.div>
+          </motion.p>
+        </div>
 
-        <div className="grid md:grid-cols-2 gap-12 max-w-5xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
           {/* Contact Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -204,6 +233,27 @@ const Contact = () => {
               </div>
 
               <div>
+                <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                  Subject
+                </label>
+                <Select
+                  value={formData.subject}
+                  onValueChange={(value) => setFormData({ ...formData, subject: value })}
+                >
+                  <SelectTrigger className="bg-background/50 border-border/50 focus:border-primary">
+                    <SelectValue placeholder="What's this about?" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {subjectOptions.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
                 <label htmlFor="message" className="block text-sm font-medium mb-2">
                   Message
                 </label>
@@ -220,15 +270,43 @@ const Contact = () => {
 
               <Button
                 type="submit"
-                disabled={isSubmitting}
+                disabled={isSubmitting || isSuccess}
                 className="spread-hover w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow hover:shadow-glow-lg transition-all"
               >
-                {isSubmitting ? 'Sending...' : (
-                  <>
-                    <Send size={18} className="mr-2" />
-                    Send Message
-                  </>
-                )}
+                <AnimatePresence mode="wait">
+                  {isSuccess ? (
+                    <motion.span
+                      key="success"
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      exit={{ opacity: 0, scale: 0.8 }}
+                      className="flex items-center"
+                    >
+                      <CheckCircle2 size={18} className="mr-2" />
+                      Sent!
+                    </motion.span>
+                  ) : isSubmitting ? (
+                    <motion.span
+                      key="sending"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                    >
+                      Sending...
+                    </motion.span>
+                  ) : (
+                    <motion.span
+                      key="idle"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      exit={{ opacity: 0 }}
+                      className="flex items-center"
+                    >
+                      <Send size={18} className="mr-2" />
+                      Send Message
+                    </motion.span>
+                  )}
+                </AnimatePresence>
               </Button>
             </form>
           </motion.div>
