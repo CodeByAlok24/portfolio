@@ -137,7 +137,7 @@ const Hero = () => {
               Get In Touch
             </a>
             <a
-              href="/Resume_Alok_Kumar_Das.pdf"
+              href="/Resume_All_one.pdf"
               download
               target="_blank"
               rel="noopener noreferrer"

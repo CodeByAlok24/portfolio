@@ -10,17 +10,22 @@ const skillGroups = [
   {
     title: 'Frameworks & Libraries',
     color: 'border-emerald-500/20 bg-emerald-500/8 text-emerald-300',
-    skills: ['React', 'Node.js', 'Express', 'Next.js', 'Tailwind CSS'],
+    skills: ['React 19', 'Vite', 'Next.js', 'Node.js', 'Express 5', 'Tailwind CSS', 'Framer Motion'],
   },
   {
     title: 'Tools & Platforms',
     color: 'border-purple-500/20 bg-purple-500/8 text-purple-300',
-    skills: ['Git', 'Docker', 'AWS', 'GitHub Actions', 'MongoDB', 'PostgreSQL', 'Redis', 'RabbitMQ'],
+    skills: ['Git', 'Docker', 'AWS', 'GitHub Actions', 'MongoDB', 'PostgreSQL', 'Redis', 'Firebase', 'Razorpay'],
+  },
+  {
+    title: 'AI & Agents',
+    color: 'border-sky-500/20 bg-sky-500/8 text-sky-300',
+    skills: ['LangChain', 'LangGraph', 'Qdrant', 'RAG', 'Vector Search', 'LLM Orchestration', 'Multi-Agent Systems'],
   },
   {
     title: 'Expertise',
     color: 'border-amber-500/20 bg-amber-500/8 text-amber-300',
-    skills: ['Full-Stack Development', 'AI Integration', 'System Design', 'UI/UX Engineering'],
+    skills: ['Full-Stack Development', 'AI Integration', 'System Design', 'Microservices', 'UI/UX Engineering'],
   },
 ];
 

@@ -24,7 +24,7 @@ const footerGroups = [
   {
     title: 'Resources',
     links: [
-      { name: 'Resume', href: '/Resume_Alok_Kumar_Das.pdf' },
+      { name: 'Resume', href: '/Resume_All_one.pdf' },
       { name: 'Contact', href: '#contact' },
     ],
   },

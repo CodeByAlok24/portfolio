@@ -4,6 +4,14 @@ import Reveal from './Reveal';
 
 const projects = [
   {
+    title: 'Citadel Agent Platform',
+    description:
+      'Full-stack multi-agent AI platform with LLM orchestration (Gemini, Groq, OpenRouter), RAG with vector search, 8 specialized agents, Firebase auth, Razorpay billing, and a React + Vite dashboard — all containerized with Docker microservices.',
+    tech: ['React 19', 'Vite', 'Tailwind CSS', 'Express 5', 'LangChain', 'LangGraph', 'MongoDB', 'Redis', 'Qdrant', 'Docker', 'Firebase', 'Razorpay'],
+    github: 'https://github.com/CodeByAlok24/citadel-agent-platform',
+    demo: '',
+  },
+  {
     title: 'TestGen-AI',
     description:
       'Automated test generation platform that creates acceptance and system test cases from source code, descriptions, user stories, and exportable self-healing reports.',
@@ -16,7 +24,7 @@ const projects = [
     description:
       'Hospital Appointment Queue and Management System with real-time queue tracking, appointment scheduling, role-based dashboards, and instant status updates.',
     tech: ['Next.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Socket.IO', 'JWT', 'Vercel'],
-    github: 'https://github.com/CodeByAlok24',
+    github: 'https://github.com/CodeByAlok24/HAQMS',
     demo: '',
   },
   {
@@ -32,7 +40,7 @@ const projects = [
     description:
       'XAI framework for Indian crop mapping using Sentinel-1/2 fusion, Attention-LSTM modeling, and SHAP explanations for Rabi crop detection.',
     tech: ['PyTorch', 'SHAP', 'GeoPandas', 'Google Earth Engine', 'Streamlit'],
-    github: 'https://github.com/CodeByAlok24',
+    github: 'https://github.com/Phantomcoder9632/NativeHarvest-XAI-Framework-for-Indian-Crop-Mapping-/tree/alok',
     demo: '',
   },
   {
