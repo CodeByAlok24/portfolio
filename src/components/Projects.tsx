@@ -1,182 +1,232 @@
-import { motion } from 'framer-motion';
-import { ExternalLink, Github } from 'lucide-react';
-import Reveal from './Reveal';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { ExternalLink, Github, ArrowUpRight, Activity, TestTube, MapPin } from 'lucide-react';
+import { useRef } from 'react';
 
-const projects = [
-  {
-    title: 'Citadel Agent Platform',
-    description:
-      'Full-stack multi-agent AI platform with LLM orchestration (Gemini, Groq, OpenRouter), RAG with vector search, 8 specialized agents, Firebase auth, Razorpay billing, and a React + Vite dashboard — all containerized with Docker microservices.',
-    tech: ['React 19', 'Vite', 'Tailwind CSS', 'Express 5', 'LangChain', 'LangGraph', 'MongoDB', 'Redis', 'Qdrant', 'Docker', 'Firebase', 'Razorpay'],
-    github: 'https://github.com/CodeByAlok24/citadel-agent-platform',
-    demo: '',
-  },
-  {
-    title: 'TestGen-AI',
-    description:
-      'Automated test generation platform that creates acceptance and system test cases from source code, descriptions, user stories, and exportable self-healing reports.',
-    tech: ['React 19', 'Vite', 'Framer Motion', 'Monaco Editor', 'Node.js', 'Express', 'MongoDB', 'Docker'],
-    github: 'https://github.com/CodeByAlok24/TestGen-AI',
-    demo: '',
-  },
-  {
-    title: 'HAQMS',
-    description:
-      'Hospital Appointment Queue and Management System with real-time queue tracking, appointment scheduling, role-based dashboards, and instant status updates.',
-    tech: ['Next.js', 'Node.js', 'PostgreSQL', 'Prisma', 'Socket.IO', 'JWT', 'Vercel'],
-    github: 'https://github.com/CodeByAlok24/HAQMS',
-    demo: '',
-  },
-  {
-    title: 'CineGharShow',
-    description:
-      'Movie ticket booking app with interactive seat maps, Stripe/Razorpay payments, admin dashboards, revenue analytics, Cloudinary media, and instant confirmation emails.',
-    tech: ['React.js', 'Tailwind CSS', 'Express.js', 'JWT', 'Stripe', 'Razorpay', 'Nodemailer', 'Cloudinary'],
-    github: 'https://github.com/CodeByAlok24/CineGharShow',
-    demo: '',
-  },
-  {
-    title: 'NativeHarvest',
-    description:
-      'XAI framework for Indian crop mapping using Sentinel-1/2 fusion, Attention-LSTM modeling, and SHAP explanations for Rabi crop detection.',
-    tech: ['PyTorch', 'SHAP', 'GeoPandas', 'Google Earth Engine', 'Streamlit'],
-    github: 'https://github.com/Phantomcoder9632/NativeHarvest-XAI-Framework-for-Indian-Crop-Mapping-/tree/alok',
-    demo: '',
-  },
-  {
-    title: 'Lost-Listed',
-    description:
-      'Campus lost-and-found platform for item reporting, student marketplace exchanges, real-time activity updates, user management, and image uploads.',
-    tech: ['React', 'TypeScript', 'Redux', 'Cloudinary', 'MongoDB'],
-    github: 'https://github.com/CodeByAlok24/Lost-Listed',
-    demo: '',
-  },
-];
+const TiltCard = ({ children, className }: { children: React.ReactNode; className?: string }) => {
+  const ref = useRef(null);
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+  const springX = useSpring(x, { stiffness: 200, damping: 20 });
+  const springY = useSpring(y, { stiffness: 200, damping: 20 });
+  const rotateX = useTransform(springY, [-0.5, 0.5], [4, -4]);
+  const rotateY = useTransform(springX, [-0.5, 0.5], [-4, 4]);
 
-const ProjectBlock = ({ project, index }: { project: typeof projects[0]; index: number }) => {
-  const isEven = index % 2 === 0;
-  const number = String(index + 1).padStart(2, '0');
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    x.set((e.clientX - rect.left) / rect.width - 0.5);
+    y.set((e.clientY - rect.top) / rect.height - 0.5);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
 
   return (
     <motion.div
-      initial={{ opacity: 0 }}
-      whileInView={{ opacity: 1 }}
-      viewport={{ once: true, margin: '-100px' }}
-      transition={{ duration: 0.6 }}
-      className="relative group w-full py-16 md:py-32 px-4 sm:px-6 lg:px-8 overflow-hidden"
-      style={{ background: isEven ? '#0a0a0a' : '#0e0e0e' }}
+      ref={ref}
+      style={{ rotateX, springY: rotateY, transformStyle: 'preserve-3d' }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      className={className}
     >
-      <motion.div
-        className="absolute top-16 right-12 w-20 h-20 rounded-full border border-white/[0.03] pointer-events-none"
-        animate={{ y: [0, -20, 0], rotate: [0, 180, 360] }}
-        transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut' }}
-      />
-      <motion.div
-        className="absolute bottom-20 left-8 w-10 h-10 rounded-full bg-white/[0.02] blur-sm pointer-events-none"
-        animate={{ y: [0, 15, 0], x: [0, 10, 0] }}
-        transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-      />
-      <motion.div
-        className="absolute top-1/3 right-1/4 w-1.5 h-1.5 rounded-full bg-white/[0.05] pointer-events-none"
-        animate={{ y: [0, -30, 0], opacity: [0.2, 0.7, 0.2] }}
-        transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
-      />
-      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/[0.015] to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out" />
-      </div>
-
-      <Reveal delay={0.1}>
-        <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
-            <div>
-              <motion.span
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-                className="block text-sm font-mono text-white/15 mb-3"
-              >
-                {number}
-              </motion.span>
-              <h3 className="text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.1] tracking-tight text-white">
-                {project.title}
-              </h3>
-            </div>
-            <div className="space-y-6">
-              <p className="text-base sm:text-lg leading-relaxed text-white/55">
-                {project.description}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {project.tech.map((tech, i) => (
-                  <motion.span
-                    key={tech}
-                    initial={{ opacity: 0, y: 10 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.3 + i * 0.05, duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                    className="px-3 py-1.5 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full"
-                  >
-                    {tech}
-                  </motion.span>
-                ))}
-              </div>
-              <motion.div
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 + project.tech.length * 0.05, duration: 0.4 }}
-                className="flex gap-6 pt-2"
-              >
-                <a
-                  href={project.github}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full hover:bg-white/[0.08] hover:text-white transition-all duration-300"
-                >
-                  <Github size={14} />
-                  View Code
-                </a>
-                {project.demo ? (
-                  <a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full hover:bg-white/[0.08] hover:text-white transition-all duration-300"
-                  >
-                    <ExternalLink size={14} />
-                    Live Demo
-                  </a>
-                ) : (
-                  <a
-                    href="#contact"
-                    className="inline-flex items-center gap-2 px-4 py-2 text-sm text-white/60 bg-white/[0.04] backdrop-blur-sm border border-white/[0.08] rounded-full hover:bg-white/[0.08] hover:text-white transition-all duration-300"
-                  >
-                    <ExternalLink size={14} />
-                    Discuss Project
-                  </a>
-                )}
-              </motion.div>
-            </div>
-          </div>
-        </div>
-      </Reveal>
+      {children}
     </motion.div>
   );
 };
 
+const projects = [
+  {
+    name: 'HAQMS',
+    tagline: 'Hospital Appointment & Queue Management System',
+    description:
+      'A real-time hospital queue management platform that streamlines patient flow, reduces wait times, and gives staff live visibility into appointments and queues.',
+    problem:
+      'Hospitals struggle with long wait times, chaotic queue management, and no real-time visibility into patient flow.',
+    tech: ['Next.js', 'Node.js', 'Express', 'PostgreSQL', 'Prisma', 'Socket.IO', 'JWT', 'RBAC', 'pgvector', 'Ollama', 'Groq'],
+    features: [
+      'Real-time queue management with live updates',
+      'Patient, staff, and admin role-based flows',
+      'RBAC and JWT authentication',
+      'REST APIs with N+1 query optimization',
+      'Socket.IO race-condition fixes',
+      'Gollum AI RAG hospital assistant with PDF/TXT ingestion',
+      'Source-cited answers and live wait-time info',
+    ],
+    icon: Activity,
+    accent: 'primary',
+    github: 'https://github.com/CodeByAlok24/HAQMS',
+    live: 'https://haqms-y1fv.vercel.app/',
+  },
+  {
+    name: 'TestGen AI',
+    tagline: 'AI-Powered Automatic Test Case Generator',
+    description:
+      'An AI platform that generates unit, integration, and acceptance test cases from source code — supporting multiple frameworks with self-healing capabilities.',
+    problem:
+      'Writing comprehensive test cases is time-consuming and often incomplete, leading to bugs slipping into production.',
+    tech: ['React', 'Vite', 'Node.js', 'Express', 'MongoDB', 'Docker', 'GitHub Actions', 'Groq', 'JWT', 'CodeQL'],
+    features: [
+      'AI-powered test generation from source code',
+      'Multiple framework exports: Pytest, JUnit, Jest',
+      'Self-healing test support',
+      'CI/CD integration with GitHub Actions',
+      'CodeQL security analysis',
+      'Docker containerization',
+      'LLM integration via Groq',
+    ],
+    icon: TestTube,
+    accent: 'primary',
+    github: 'https://github.com/CodeByAlok24/TestGen-AI',
+    live: 'https://test-gen-ai-gamma.vercel.app/',
+    badge: 'Runner-Up — Agentica 2.0 Hackathon',
+  },
+  {
+    name: 'SRAP',
+    tagline: 'Smart Route AI Planner',
+    description:
+      'A multimodal travel route optimizer that finds the best path across flights, trains, metro, buses, and autos using Dijkstra\'s algorithm with AI-generated explanations.',
+    problem:
+      'Planning multi-modal travel routes is complex — balancing cost, time, distance, and convenience across different transport modes.',
+    tech: ['Django REST Framework', 'Next.js', 'React', 'TypeScript', 'Tailwind CSS', 'MySQL', 'JWT', 'Groq', 'Cerebras'],
+    features: [
+      'Multi-modal: flights, trains, metro, buses, autos',
+      "Dijkstra's algorithm for optimal pathfinding",
+      'Cost, time, distance, and stop-count scoring',
+      'AI-generated natural-language route explanations',
+      'REST API with Django REST Framework',
+    ],
+    icon: MapPin,
+    accent: 'primary',
+    github: 'https://github.com/CodeByAlok24/SRAP---Smart-Route-AI-Planner',
+    live: null,
+  },
+];
+
 const Projects = () => {
   return (
-    <section id="projects">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 md:pt-32 pb-4">
-        <Reveal>
-          <h2 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white">
-            Projects
+    <section id="projects" className="section-padding relative">
+      <div className="absolute inset-0 dot-bg dot-bg-fade pointer-events-none" />
+      <div className="container-max relative">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="mono-label text-primary">Projects</span>
+          <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+            Featured work
           </h2>
-        </Reveal>
+          <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
+            Products I've designed, built, and shipped — from real-time systems to AI-powered platforms.
+          </p>
+        </motion.div>
+
+        <div className="mt-16 space-y-20">
+          {projects.map((project, idx) => (
+            <motion.article
+              key={project.name}
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: '-60px' }}
+              transition={{ duration: 0.6, delay: idx * 0.1 }}
+              className="group"
+            >
+              <div className="grid lg:grid-cols-12 gap-8 lg:gap-12">
+                <div className="lg:col-span-5">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                      <project.icon className="w-5 h-5 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-display text-2xl md:text-3xl font-bold text-foreground">
+                        {project.name}
+                      </h3>
+                      <p className="text-sm text-muted-foreground">{project.tagline}</p>
+                    </div>
+                  </div>
+
+                  <p className="text-muted-foreground leading-relaxed mt-4">
+                    {project.description}
+                  </p>
+
+                  <p className="mt-3 text-sm text-muted-foreground/80 italic">
+                    {project.problem}
+                  </p>
+
+                  {project.badge && (
+                    <div className="mt-4 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-medium">
+                      <ArrowUpRight className="w-3 h-3" />
+                      {project.badge}
+                    </div>
+                  )}
+
+                  <div className="mt-6 flex flex-wrap gap-2">
+                    {project.tech.map((t) => (
+                      <span
+                        key={t}
+                        className="px-2.5 py-1 text-xs font-mono rounded border border-border bg-card/50 text-muted-foreground"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 flex items-center gap-3">
+                    <motion.a
+                      href={project.github}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md border border-border text-foreground hover:border-primary/30 hover:bg-secondary/50 transition-all"
+                    >
+                      <Github className="w-4 h-4" />
+                      Code
+                    </motion.a>
+                    {project.live && (
+                      <motion.a
+                        href={project.live}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        whileHover={{ scale: 1.05 }}
+                        whileTap={{ scale: 0.95 }}
+                        className="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all"
+                      >
+                        <ExternalLink className="w-4 h-4" />
+                        Live Demo
+                      </motion.a>
+                    )}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-7">
+                  <TiltCard className="h-full min-h-[280px] rounded-xl border border-border bg-card/30 p-6 md:p-8 flex flex-col">
+                    <h4 className="mono-label text-muted-foreground mb-4">Key Features</h4>
+                    <ul className="space-y-3 flex-1">
+                      {project.features.map((feature, i) => (
+                        <motion.li
+                          key={i}
+                          initial={{ opacity: 0, x: -12 }}
+                          whileInView={{ opacity: 1, x: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ duration: 0.3, delay: i * 0.06 }}
+                          className="flex items-start gap-3 text-sm text-muted-foreground"
+                        >
+                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-primary/60 shrink-0" />
+                          {feature}
+                        </motion.li>
+                      ))}
+                    </ul>
+                  </TiltCard>
+                </div>
+              </div>
+            </motion.article>
+          ))}
+        </div>
       </div>
-      {projects.map((project, index) => (
-        <ProjectBlock key={project.title} project={project} index={index} />
-      ))}
     </section>
   );
 };

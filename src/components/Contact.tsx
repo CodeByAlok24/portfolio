@@ -1,313 +1,195 @@
-import { useState, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, CheckCircle2 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@/components/ui/select';
-import { useToast } from '@/hooks/use-toast';
-
-const subjectOptions = [
-  { value: 'collaboration', label: 'Project Collaboration' },
-  { value: 'freelance', label: 'Freelance Work' },
-  { value: 'job', label: 'Job Opportunity' },
-  { value: 'mentorship', label: 'Mentorship' },
-  { value: 'other', label: 'Other' },
-];
-
-const contactInfo = [
-  {
-    icon: Mail,
-    label: 'Email',
-    value: 'alok.officials.25@gmail.com',
-    href: 'mailto:alok.officials.25@gmail.com',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '+91 9835137229',
-    href: 'tel:+919835137229',
-  },
-  {
-    icon: MapPin,
-    label: 'Location',
-    value: 'Dharwad, Karnataka',
-    href: '#',
-  },
-];
-
-const getErrorMessage = (err: unknown) => {
-  if (err instanceof Error) {
-    return err.message;
-  }
-
-  return 'Please try again later or email me directly.';
-};
+import { motion } from 'framer-motion';
+import { Mail, Linkedin, Github, ArrowUpRight, MapPin } from 'lucide-react';
+import { useState } from 'react';
 
 const Contact = () => {
-  const { toast } = useToast();
-  const formRef = useRef<HTMLFormElement | null>(null);
-
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    subject: '',
-    message: '',
-  });
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isSuccess, setIsSuccess] = useState(false);
-
-  const isValidEmail = (e: string) =>
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(e.trim());
+  const [formData, setFormData] = useState({ name: '', email: '', subject: 'collaboration', message: '' });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
-    // Basic validation
-    if (!formData.name.trim()) {
-      toast({ title: 'Name required', description: 'Please enter your name.' });
-      return;
-    }
-    if (!isValidEmail(formData.email)) {
-      toast({ title: 'Invalid email', description: 'Please enter a valid email.' });
-      return;
-    }
-    if (!formData.subject) {
-      toast({ title: 'Subject required', description: 'Please select a subject.' });
-      return;
-    }
-    if (!formData.message.trim()) {
-      toast({ title: 'Message required', description: 'Please enter your message.' });
-      return;
-    }
-
+    setStatus('sending');
     try {
-      setIsSubmitting(true);
-
-      const response = await fetch('/api/contact', {
+      const res = await fetch('/api/contact', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          name: formData.name,
-          email: formData.email,
-          subject: formData.subject,
-          message: formData.message,
-        }),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-
-      const result = await response.json().catch(() => null);
-
-      if (!response.ok) {
-        throw new Error(result?.message || 'Please try again later or email me directly.');
+      if (res.ok) {
+        setStatus('sent');
+        setFormData({ name: '', email: '', subject: 'collaboration', message: '' });
+      } else {
+        setStatus('error');
       }
-
-      toast({
-        title: 'Message sent!',
-        description:
-          "Thanks for reaching out. Let's collaborate - I'll get back to you shortly.",
-      });
-
-      setIsSuccess(true);
-      setTimeout(() => setIsSuccess(false), 3000);
-      setFormData({ name: '', email: '', subject: '', message: '' });
-      formRef.current?.reset();
-    } catch (err: unknown) {
-      const message = getErrorMessage(err);
-      console.error('Contact form error:', message);
-      toast({
-        title: 'Failed to send',
-        description: message,
-      });
-    } finally {
-      setIsSubmitting(false);
+    } catch {
+      setStatus('error');
     }
   };
 
   return (
-    <section id="contact" className="py-16 md:py-32 relative">
-      <div className="container mx-auto px-4">
-        <div className="mb-16">
-          <motion.h2
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-            className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white"
-          >
-            Get In Touch
-          </motion.h2>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-4 text-lg text-white/50 max-w-2xl"
-          >
-            Have a project in mind or want to collaborate? Feel free to reach out!
-          </motion.p>
-        </div>
-
-        <div className="grid md:grid-cols-2 gap-8 md:gap-12 max-w-5xl mx-auto">
-          {/* Contact Info */}
+    <section id="contact" className="section-padding bg-card/30">
+      <div className="container-max">
+        <div className="grid lg:grid-cols-2 gap-16 lg:gap-24">
           <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="space-y-4 sm:space-y-6"
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.5 }}
           >
-            {contactInfo.map((info, index) => {
-              const Icon = info.icon;
-              return (
+            <span className="mono-label text-primary">Contact</span>
+            <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground text-balance">
+              Have an idea?
+              <br />
+              Let's build something.
+            </h2>
+            <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-md">
+              I'm always open to discussing new projects, collaborations, or
+              just talking about tech and building products.
+            </p>
+
+            <div className="mt-10 space-y-4">
+              {[
+                { href: 'mailto:alok.officials.25@gmail.com', icon: Mail, label: 'Email', value: 'alok.officials.25@gmail.com' },
+                { href: 'https://www.linkedin.com/in/alok-kumar-das-590885294/', icon: Linkedin, label: 'LinkedIn', value: 'Connect with me' },
+                { href: 'https://github.com/CodeByAlok24', icon: Github, label: 'GitHub', value: 'See my code' },
+              ].map((item, i) => (
                 <motion.a
-                  key={info.label}
-                  href={info.href}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  whileHover={{ x: 10 }}
-                  className="animated-card spread-hover glass glass-hover group flex items-center gap-4 rounded-xl p-4 sm:p-6"
+                  transition={{ duration: 0.4, delay: i * 0.1 }}
+                  whileHover={{ x: 4 }}
+                  className="flex items-center gap-4 p-4 rounded-lg border border-border bg-card/50 card-hover group"
                 >
-                  <div className="h-11 w-11 flex-shrink-0 rounded-lg bg-gradient-to-br from-primary to-accent p-3 shadow-glow sm:h-12 sm:w-12">
-                    <Icon className="w-full h-full text-white" />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-muted-foreground text-sm mb-1">{info.label}</p>
-                    <p className="break-words text-sm font-medium text-foreground sm:text-base">{info.value}</p>
+                  <motion.div
+                    whileHover={{ rotate: [0, -10, 10, 0] }}
+                    transition={{ duration: 0.4 }}
+                    className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center"
+                  >
+                    <item.icon className="w-5 h-5 text-primary" />
+                  </motion.div>
+                  <div>
+                    <p className="text-sm text-muted-foreground">{item.label}</p>
+                    <p className="text-foreground font-medium group-hover:text-primary transition-colors">{item.value}</p>
                   </div>
                 </motion.a>
-              );
-            })}
+              ))}
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                whileInView={{ opacity: 1, x: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.3 }}
+                className="flex items-center gap-4 p-4 rounded-lg border border-border bg-card/50"
+              >
+                <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center">
+                  <MapPin className="w-5 h-5 text-primary" />
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Location</p>
+                  <p className="text-foreground font-medium">IIIT Dharwad, India</p>
+                </div>
+              </motion.div>
+            </div>
           </motion.div>
 
-          {/* Contact Form */}
           <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.5, delay: 0.1 }}
           >
-            <form ref={formRef} onSubmit={handleSubmit} className="animated-card glass rounded-2xl p-5 space-y-5 sm:p-8 sm:space-y-6">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium mb-2">
-                  Name
-                </label>
-                <Input
-                  id="name"
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  required
-                  className="bg-background/50 border-border/50 focus:border-primary"
-                  placeholder="Your name"
-                />
+            <form onSubmit={handleSubmit} className="space-y-5">
+              <div className="grid sm:grid-cols-2 gap-5">
+                <div>
+                  <label htmlFor="contact-name" className="block text-sm font-medium text-foreground mb-2">
+                    Name
+                  </label>
+                  <input
+                    id="contact-name"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    className="w-full px-4 py-3 rounded-md border border-border bg-card/50 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
+                    placeholder="Your name"
+                  />
+                </div>
+                <div>
+                  <label htmlFor="contact-email" className="block text-sm font-medium text-foreground mb-2">
+                    Email
+                  </label>
+                  <input
+                    id="contact-email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="w-full px-4 py-3 rounded-md border border-border bg-card/50 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
+                    placeholder="you@example.com"
+                  />
+                </div>
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium mb-2">
-                  Email
-                </label>
-                <Input
-                  id="email"
-                  type="email"
-                  value={formData.email}
-                  onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  required
-                  className="bg-background/50 border-border/50 focus:border-primary"
-                  placeholder="your.email@example.com"
-                />
-                {isValidEmail(formData.email) && (
-                  <div className="text-primary mt-2 text-sm">
-                    Awesome! I'd love to collaborate - share your project details below.
-                  </div>
-                )}
-              </div>
-
-              <div>
-                <label htmlFor="subject" className="block text-sm font-medium mb-2">
+                <label htmlFor="contact-subject" className="block text-sm font-medium text-foreground mb-2">
                   Subject
                 </label>
-                <Select
+                <select
+                  id="contact-subject"
                   value={formData.subject}
-                  onValueChange={(value) => setFormData({ ...formData, subject: value })}
+                  onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md border border-border bg-card/50 text-foreground focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors"
                 >
-                  <SelectTrigger className="bg-background/50 border-border/50 focus:border-primary">
-                    <SelectValue placeholder="What's this about?" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {subjectOptions.map((option) => (
-                      <SelectItem key={option.value} value={option.value}>
-                        {option.label}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  <option value="collaboration">Collaboration</option>
+                  <option value="freelance">Freelance Project</option>
+                  <option value="job">Job Opportunity</option>
+                  <option value="mentorship">Mentorship</option>
+                  <option value="other">Other</option>
+                </select>
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium mb-2">
+                <label htmlFor="contact-message" className="block text-sm font-medium text-foreground mb-2">
                   Message
                 </label>
-                <Textarea
-                  id="message"
-                  value={formData.message}
-                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                <textarea
+                  id="contact-message"
                   required
                   rows={5}
-                  className="bg-background/50 border-border/50 focus:border-primary resize-none"
-                  placeholder="Tell me about your project..."
+                  value={formData.message}
+                  onChange={(e) => setFormData({ ...formData, message: e.target.value })}
+                  className="w-full px-4 py-3 rounded-md border border-border bg-card/50 text-foreground placeholder:text-muted-foreground/50 focus:outline-none focus:border-primary/40 focus:ring-1 focus:ring-primary/20 transition-colors resize-none"
+                  placeholder="Tell me about your project or idea..."
                 />
               </div>
 
-              <Button
+              <button
                 type="submit"
-                disabled={isSubmitting || isSuccess}
-                className="spread-hover w-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-glow hover:shadow-glow-lg transition-all"
+                disabled={status === 'sending'}
+                className="w-full inline-flex items-center justify-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-[0_0_30px_-6px_hsl(var(--primary)/0.5)] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <AnimatePresence mode="wait">
-                  {isSuccess ? (
-                    <motion.span
-                      key="success"
-                      initial={{ opacity: 0, scale: 0.8 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                      exit={{ opacity: 0, scale: 0.8 }}
-                      className="flex items-center"
-                    >
-                      <CheckCircle2 size={18} className="mr-2" />
-                      Sent!
-                    </motion.span>
-                  ) : isSubmitting ? (
-                    <motion.span
-                      key="sending"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                    >
-                      Sending...
-                    </motion.span>
-                  ) : (
-                    <motion.span
-                      key="idle"
-                      initial={{ opacity: 0 }}
-                      animate={{ opacity: 1 }}
-                      exit={{ opacity: 0 }}
-                      className="flex items-center"
-                    >
-                      <Send size={18} className="mr-2" />
-                      Send Message
-                    </motion.span>
-                  )}
-                </AnimatePresence>
-              </Button>
+                {status === 'sending' ? (
+                  'Sending...'
+                ) : status === 'sent' ? (
+                  'Message Sent'
+                ) : (
+                  <>
+                    Send Message
+                    <ArrowUpRight className="w-4 h-4" />
+                  </>
+                )}
+              </button>
+
+              {status === 'error' && (
+                <p className="text-sm text-destructive text-center">
+                  Something went wrong. Please try again or reach out via email.
+                </p>
+              )}
             </form>
           </motion.div>
         </div>

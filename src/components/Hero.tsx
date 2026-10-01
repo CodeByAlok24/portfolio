@@ -1,169 +1,218 @@
+import { motion, useMotionValue, useSpring } from 'framer-motion';
+import { ArrowDown, Github, Linkedin, FileText } from 'lucide-react';
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { ArrowDown, Sparkles } from 'lucide-react';
 
-const cyclingWords = ['Interfaces', 'Experiences', 'Products', 'Solutions', 'Systems'];
+const words = ['products', 'systems', 'AI experiences', 'web apps', 'real-time tools'];
+
+const CursorGlow = () => {
+  const x = useMotionValue(-200);
+  const y = useMotionValue(-200);
+  const springX = useSpring(x, { stiffness: 150, damping: 20 });
+  const springY = useSpring(y, { stiffness: 150, damping: 20 });
+
+  useEffect(() => {
+    const move = (e: MouseEvent) => {
+      x.set(e.clientX - 150);
+      y.set(e.clientY - 150);
+    };
+    window.addEventListener('mousemove', move);
+    return () => window.removeEventListener('mousemove', move);
+  }, [x, y]);
+
+  return (
+    <motion.div
+      style={{ x: springX, y: springY }}
+      className="fixed w-[300px] h-[300px] rounded-full bg-primary/[0.04] blur-[80px] pointer-events-none z-0 hidden md:block"
+    />
+  );
+};
 
 const Hero = () => {
-  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
   const [wordIndex, setWordIndex] = useState(0);
+  const [text, setText] = useState('');
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setWordIndex((prev) => (prev + 1) % cyclingWords.length);
-    }, 2500);
-    return () => clearInterval(interval);
-  }, []);
+    const currentWord = words[wordIndex];
+    const timeout = setTimeout(() => {
+      if (!isDeleting) {
+        setText(currentWord.slice(0, text.length + 1));
+        if (text.length === currentWord.length) {
+          setTimeout(() => setIsDeleting(true), 1500);
+        }
+      } else {
+        setText(currentWord.slice(0, text.length - 1));
+        if (text.length === 0) {
+          setIsDeleting(false);
+          setWordIndex((prev) => (prev + 1) % words.length);
+        }
+      }
+    }, isDeleting ? 40 : 80);
 
-  useEffect(() => {
-    const handleMouseMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 2;
-      const y = (e.clientY / window.innerHeight - 0.5) * 2;
-      setMousePos({ x, y });
-    };
-    window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    return () => clearTimeout(timeout);
+  }, [text, isDeleting, wordIndex]);
 
   return (
     <section
       id="home"
-      className="relative h-screen w-full overflow-hidden flex items-center justify-center"
+      className="relative min-h-screen flex items-center justify-center overflow-hidden"
     >
-      <div
-        className="absolute inset-0"
-        style={{
-          background: `
-            radial-gradient(ellipse 120% 100% at 20% 40%, rgba(180, 83, 9, 0.4) 0%, transparent 50%),
-            radial-gradient(ellipse 100% 120% at 80% 30%, rgba(120, 53, 15, 0.35) 0%, transparent 50%),
-            radial-gradient(ellipse 80% 80% at 60% 70%, rgba(161, 98, 7, 0.25) 0%, transparent 50%),
-            radial-gradient(ellipse 60% 60% at 30% 80%, rgba(120, 53, 15, 0.2) 0%, transparent 50%),
-            radial-gradient(ellipse 50% 50% at 70% 50%, rgba(180, 83, 9, 0.15) 0%, transparent 50%),
-            linear-gradient(180deg, #0f0a06 0%, #120c07 40%, #1a100a 70%, #0f0a06 100%)
-          `,
-        }}
+      <CursorGlow />
+      <div className="absolute inset-0 grid-bg grid-bg-fade" />
+
+      <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full bg-primary/[0.04] blur-[120px] pointer-events-none" />
+
+      <motion.div
+        animate={{ y: [0, -20, 0], rotate: [0, 5, 0] }}
+        transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
+        className="absolute top-20 right-10 w-72 h-72 rounded-full border border-primary/[0.06] pointer-events-none"
+      />
+      <motion.div
+        animate={{ y: [0, 15, 0], rotate: [0, -3, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
+        className="absolute top-32 right-24 w-48 h-48 rounded-full border border-primary/[0.04] pointer-events-none"
+      />
+      <motion.div
+        animate={{ y: [0, -12, 0], x: [0, 8, 0] }}
+        transition={{ duration: 7, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+        className="absolute bottom-32 left-16 w-56 h-56 rounded-full border border-primary/[0.05] pointer-events-none"
       />
 
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <motion.div
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] sm:w-[900px] sm:h-[900px] rounded-full bg-gradient-to-br from-[#b45309]/40 via-[#78350f]/25 to-transparent blur-[120px]"
-          animate={{
-            x: mousePos.x * -30,
-            y: mousePos.y * -30,
-          }}
-          transition={{ type: 'spring', stiffness: 30, damping: 20 }}
-        />
+      <motion.div
+        animate={{ y: [0, 10, 0] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut', delay: 2 }}
+        className="absolute top-1/3 left-10 w-3 h-3 rounded-full bg-primary/30 pointer-events-none"
+      />
+      <motion.div
+        animate={{ y: [0, -15, 0] }}
+        transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+        className="absolute bottom-1/3 right-1/4 w-2 h-2 rounded-full bg-primary/20 pointer-events-none"
+      />
+      <motion.div
+        animate={{ scale: [1, 1.5, 1] }}
+        transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 1.5 }}
+        className="absolute top-1/2 right-10 w-2 h-2 rounded-full bg-primary/25 pointer-events-none"
+      />
 
-        <motion.div
-          className="absolute -top-[30%] -left-[10%] w-[800px] h-[800px] rounded-full bg-gradient-to-br from-[#b45309]/30 via-[#d97706]/15 to-transparent blur-[100px]"
-          animate={{
-            x: [0, 60, -30, 0],
-            y: [0, -40, 20, 0],
-          }}
-          transition={{ duration: 25, repeat: Infinity, ease: 'easeInOut' }}
-        />
-
-        <motion.div
-          className="absolute -bottom-[20%] -right-[15%] w-[600px] h-[600px] rounded-full bg-gradient-to-br from-[#78350f]/25 via-[#92400e]/15 to-transparent blur-[100px]"
-          animate={{
-            x: [0, -40, 50, 0],
-            y: [0, 30, -50, 0],
-          }}
-          transition={{ duration: 28, repeat: Infinity, ease: 'easeInOut', delay: 5 }}
-        />
-      </div>
-
-      <div className="relative z-10 flex flex-col items-center justify-center px-4 w-full">
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="text-center max-w-4xl mx-auto"
-        >
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 lg:px-20 w-full pt-24 pb-16">
+        <div className="max-w-4xl">
           <motion.div
-            initial={{ opacity: 0, y: 15 }}
+            initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.05, ease: [0.16, 1, 0.3, 1] }}
-            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#c4956a]/[0.08] backdrop-blur-xl border border-[#c4956a]/[0.15] text-[#c4956a]/80 text-xs sm:text-sm mb-8 shadow-[0_8px_32px_rgba(0,0,0,0.3)]"
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="flex items-center gap-3 mb-8"
           >
-            <span className="w-1.5 h-1.5 rounded-full bg-[#c4956a] shadow-[0_0_8px_rgba(196,149,106,0.5)]" />
-            AI / Full-Stack Developer
-            <Sparkles size={12} className="text-[#c4956a]/50" />
+            <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+            <span className="mono-label text-primary">
+              Full-Stack Developer
+            </span>
           </motion.div>
 
           <motion.h1
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="text-white font-bold leading-[1.1] tracking-tight text-[2.2rem] sm:text-6xl md:text-7xl lg:text-[64px]"
+            transition={{ duration: 0.6, delay: 0.2 }}
+            className="font-display text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold leading-[0.95] tracking-tight text-foreground text-balance"
           >
-            Alok Kumar Das
+            Building{' '}
+            <span className="gradient-text">
+              {text}
+              <motion.span
+                animate={{ opacity: [1, 0] }}
+                transition={{ duration: 0.8, repeat: Infinity }}
+                className="text-primary"
+              >
+                |
+              </motion.span>
+            </span>
           </motion.h1>
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-6 text-white/50 text-base sm:text-[21px] font-light leading-relaxed max-w-2xl mx-auto px-4 sm:px-0"
+            transition={{ duration: 0.6, delay: 0.35 }}
+            className="mt-8 text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed"
           >
-            Building smart, polished{' '}
-            <span className="relative inline-flex h-[1.2em] overflow-hidden">
-              <AnimatePresence mode="popLayout">
-                <motion.span
-                  key={cyclingWords[wordIndex]}
-                  initial={{ y: 24, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  exit={{ y: -24, opacity: 0 }}
-                  transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-                  className="text-[#c4956a] font-normal"
-                >
-                  {cyclingWords[wordIndex]}
-                </motion.span>
-              </AnimatePresence>
-            </span>{' '}
-            that leave a strong first impression.
+            Full-stack developer focused on building reliable web applications,
+            real-time systems, and AI-powered products.
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, delay: 0.55, ease: [0.16, 1, 0.3, 1] }}
-            className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
+            transition={{ duration: 0.6, delay: 0.5 }}
+            className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <a
+            <motion.a
+              href="#projects"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-md bg-primary text-primary-foreground hover:bg-primary/90 transition-all hover:shadow-[0_0_30px_-6px_hsl(var(--primary)/0.5)]"
+            >
+              View Projects
+              <ArrowDown className="w-4 h-4" />
+            </motion.a>
+            <motion.a
               href="#contact"
-              className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-gradient-to-r from-[#b45309] via-[#a16207] to-[#78350f] backdrop-blur-xl border border-[#c4956a]/[0.2] text-white font-medium text-sm hover:from-[#c2410c] hover:via-[#b45309] hover:to-[#92400e] transition-all duration-300 shadow-[0_8px_32px_rgba(180,83,9,0.3)] hover:shadow-glow"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className="inline-flex items-center gap-2 px-6 py-3.5 text-sm font-semibold rounded-md border border-border text-foreground hover:border-primary/30 hover:bg-secondary/50 transition-all"
             >
-              Get In Touch
-            </a>
-            <a
-              href="/Resume_All_one.pdf"
-              download
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center px-8 py-3.5 rounded-full bg-[#c4956a]/[0.06] backdrop-blur-xl border border-[#c4956a]/[0.12] text-white/70 font-medium text-sm hover:bg-[#c4956a]/[0.12] hover:text-white transition-all duration-300"
-            >
-              View Resume
-            </a>
+              Contact Me
+            </motion.a>
           </motion.div>
-        </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.6, delay: 0.7 }}
+            className="mt-12 flex items-center gap-4"
+          >
+            <span className="mono-label text-muted-foreground">Find me on</span>
+            <div className="flex items-center gap-1">
+              {[
+                { href: 'https://github.com/CodeByAlok24', icon: Github, label: 'GitHub' },
+                { href: 'https://www.linkedin.com/in/alok-kumar-das-590885294/', icon: Linkedin, label: 'LinkedIn' },
+                { href: '/Resume_All_one.pdf', icon: FileText, label: 'Resume' },
+              ].map((item, i) => (
+                <motion.a
+                  key={item.label}
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.8 + i * 0.1 }}
+                  whileHover={{ y: -4, scale: 1.1 }}
+                  className="w-10 h-10 flex items-center justify-center rounded-md text-muted-foreground hover:text-foreground hover:bg-secondary transition-all"
+                  aria-label={item.label}
+                >
+                  <item.icon className="w-5 h-5" />
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </div>
 
-      <motion.a
-        href="#about"
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2 }}
+        transition={{ delay: 1.2, duration: 0.8 }}
         className="absolute bottom-8 left-1/2 -translate-x-1/2"
       >
         <motion.div
-          animate={{ y: [0, 6, 0] }}
-          transition={{ duration: 2, repeat: Infinity }}
-          className="flex items-center justify-center w-10 h-10 rounded-full bg-[#c4956a]/[0.08] backdrop-blur-md border border-[#c4956a]/[0.12] text-[#c4956a]/50 hover:bg-[#c4956a]/[0.15] transition-all duration-300"
+          animate={{ y: [0, 8, 0] }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+          className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-1.5"
         >
-          <ArrowDown size={16} />
+          <motion.div
+            animate={{ y: [0, 12, 0] }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+            className="w-1.5 h-2.5 rounded-full bg-muted-foreground/50"
+          />
         </motion.div>
-      </motion.a>
+      </motion.div>
     </section>
   );
 };

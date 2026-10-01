@@ -1,104 +1,127 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion, useInView } from 'framer-motion';
-import Reveal from './Reveal';
-import { ArrowUpRight, Code2, Layers, Award } from 'lucide-react';
+import { motion, useScroll, useTransform } from 'framer-motion';
+import { Code2, Database, Brain, Wrench } from 'lucide-react';
+import { useRef } from 'react';
 
-const stats = [
-  { value: 2, suffix: '+', label: 'Years Coding', icon: Code2 },
-  { value: 8, suffix: '+', label: 'Projects Built', icon: Layers },
-  { value: 6, suffix: '+', label: 'Certifications', icon: Award },
+const highlights = [
+  { icon: Code2, label: 'Full-Stack Development', desc: 'End-to-end web applications' },
+  { icon: Database, label: 'Backend & Systems', desc: 'APIs, databases, real-time infra' },
+  { icon: Brain, label: 'AI / LLM Integration', desc: 'RAG, embeddings, AI products' },
+  { icon: Wrench, label: 'DevOps & Deployment', desc: 'CI/CD, Docker, cloud platforms' },
 ];
 
-const CountUp = ({ target, suffix }: { target: number; suffix?: string }) => {
-  const [count, setCount] = useState(0);
-  const ref = useRef(null);
-  const isInView = useInView(ref, { once: true });
-
-  useEffect(() => {
-    if (!isInView) return;
-    const duration = 1500;
-    const steps = 40;
-    const increment = target / steps;
-    let current = 0;
-    const timer = setInterval(() => {
-      current += increment;
-      if (current >= target) {
-        setCount(target);
-        clearInterval(timer);
-      } else {
-        setCount(Math.floor(current));
-      }
-    }, duration / steps);
-    return () => clearInterval(timer);
-  }, [isInView, target]);
-
-  return (
-    <span ref={ref} className="tabular-nums">
-      {count}{suffix}
-    </span>
-  );
-};
-
 const About = () => {
+  const ref = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: ref,
+    offset: ['start end', 'end start'],
+  });
+  const y = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const opacity = useTransform(scrollYProgress, [0, 0.3, 0.7, 1], [0.3, 1, 1, 0.3]);
+
   return (
-    <section id="about" className="py-24 md:py-32">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid md:grid-cols-2 gap-16 md:gap-20">
-          <Reveal>
-            <h2 className="text-4xl sm:text-5xl font-bold leading-[1.1] tracking-tight text-white">
-              About Me
-            </h2>
-          </Reveal>
+    <section id="about" ref={ref} className="section-padding relative bg-accent-circle overflow-hidden">
+      <motion.div
+        style={{ y, opacity }}
+        className="absolute top-20 -right-20 w-80 h-80 rounded-full border border-primary/[0.04] pointer-events-none"
+      />
+      <motion.div
+        style={{ y: useTransform(scrollYProgress, [0, 1], [-40, 40]) }}
+        className="absolute bottom-20 -left-20 w-60 h-60 rounded-full border border-primary/[0.03] pointer-events-none"
+      />
 
-          <Reveal delay={0.1}>
-            <div className="space-y-6">
-              <p className="text-lg leading-relaxed text-white/60">
-                I am a <span className="font-semibold text-white">Computer Science student at IIIT Dharwad</span> and{' '}
-                <span className="font-semibold text-white">AI / Full-Stack Developer</span> building
-                polished products with React, TypeScript, Node.js, Express, MongoDB, and modern AI workflows.
-                My work is driven by clear interfaces, secure engineering, and practical problem solving.
-              </p>
-              <p className="text-lg leading-relaxed text-white/60">
-                Recent work includes an automated test generation platform, a movie ticket booking
-                app, and a campus lost-and-found marketplace. I like collaborating with teams that
-                value ownership, strong communication, and user-focused execution.
-              </p>
+      <div className="container-max relative">
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: '-80px' }}
+          transition={{ duration: 0.5 }}
+        >
+          <span className="mono-label text-primary">About</span>
+          <h2 className="mt-4 font-display text-3xl md:text-4xl lg:text-5xl font-bold tracking-tight text-foreground">
+            Who I am
+          </h2>
+        </motion.div>
 
-              <div className="grid grid-cols-3 gap-2 sm:gap-4 pt-4">
-                {stats.map((stat, i) => {
-                  const Icon = stat.icon;
-                  return (
-                    <motion.div
-                      key={stat.label}
-                      initial={{ opacity: 0, y: 16 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 0.3 + i * 0.1, duration: 0.5 }}
-                      className="text-center"
-                    >
-                      <div className="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/5 mb-2">
-                        <Icon size={16} className="text-white/40" />
-                      </div>
-                      <div className="text-2xl sm:text-3xl font-bold text-white">
-                        <CountUp target={stat.value} suffix={stat.suffix} />
-                      </div>
-                      <div className="text-xs text-white/40 mt-0.5">{stat.label}</div>
-                    </motion.div>
-                  );
-                })}
-              </div>
+        <div className="mt-12 grid lg:grid-cols-2 gap-12 lg:gap-20">
+          <motion.div
+            initial={{ opacity: 0, y: 24 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-80px' }}
+            transition={{ duration: 0.5, delay: 0.1 }}
+            className="space-y-6"
+          >
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+              className="text-lg text-muted-foreground leading-relaxed"
+            >
+              I'm a Computer Science student at IIIT Dharwad who likes building
+              things that work. Not just demos — real products that solve real
+              problems.
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.3 }}
+              className="text-lg text-muted-foreground leading-relaxed"
+            >
+              My core strength is full-stack development. I work across the
+              entire stack — from designing database schemas and building REST
+              APIs to crafting frontend interfaces and deploying to production.
+              I care about writing clean, maintainable code and building systems
+              that scale.
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.4 }}
+              className="text-lg text-muted-foreground leading-relaxed"
+            >
+              Lately, I've been deep into AI-powered engineering — building RAG
+              systems, integrating LLMs into real applications, and working with
+              vector databases. I'm interested in how AI can be woven into
+              products in a way that's actually useful, not just a gimmick.
+            </motion.p>
+            <motion.p
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, delay: 0.5 }}
+              className="text-lg text-muted-foreground leading-relaxed"
+            >
+              When I'm not coding, I'm solving DSA problems, contributing to
+              hackathons, or exploring new tools and frameworks.
+            </motion.p>
+          </motion.div>
 
-              <div className="pt-2">
-                <a
-                  href="#contact"
-                  className="inline-flex items-center gap-2 text-white/70 font-medium border-b border-white/20 hover:border-white transition-all"
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            {highlights.map((item, i) => (
+              <motion.div
+                key={item.label}
+                initial={{ opacity: 0, y: 16, scale: 0.95 }}
+                whileInView={{ opacity: 1, y: 0, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: 0.1 + i * 0.08 }}
+                whileHover={{ y: -4, scale: 1.02 }}
+                className="p-5 rounded-lg border border-border bg-card/50 card-hover"
+              >
+                <motion.div
+                  whileHover={{ rotate: [0, -10, 10, 0] }}
+                  transition={{ duration: 0.4 }}
                 >
-                  Let's work together
-                  <ArrowUpRight size={16} />
-                </a>
-              </div>
-            </div>
-          </Reveal>
+                  <item.icon className="w-5 h-5 text-primary mb-3" />
+                </motion.div>
+                <h3 className="font-display font-semibold text-sm text-foreground">
+                  {item.label}
+                </h3>
+                <p className="mt-1 text-sm text-muted-foreground">{item.desc}</p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
